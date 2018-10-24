@@ -14,6 +14,11 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 
+/**Project Pigeo
+ * @author Sihan Tawsik, Samnan Rahee
+ * Copyright TechnoRex Team
+ */
+
 public class LoginActivity extends Activity {
     private static int RC_SIGN_IN = 100;
     private GoogleSignInClient mGoogleSignInClient;
