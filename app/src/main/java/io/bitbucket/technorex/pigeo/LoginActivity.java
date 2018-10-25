@@ -13,6 +13,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import org.jetbrains.annotations.NotNull;
 
 /**Project Pigeo
  * @author Sihan Tawsik, Samnan Rahee
@@ -22,17 +23,26 @@ import com.google.android.gms.tasks.Task;
 public class LoginActivity extends Activity {
     private static int RC_SIGN_IN = 100;
     private GoogleSignInClient mGoogleSignInClient;
+    @SuppressWarnings("FieldCanBeLocal")
+    private SignInButton googleSignInButton;
+    @SuppressWarnings("FieldCanBeLocal")
+    private GoogleSignInOptions gso;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
 
-        //setting up google client
-        GoogleSignInOptions gso = new GoogleSignInOptions
+        //initializing variables
+        gso = new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleSignInButton = findViewById(R.id.google_sign_in_button);
+        /*Sign In with email button*/
 
+
+        /*Google Sign In button*/
         //checking for a previous logged in session
         GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
 
@@ -41,18 +51,19 @@ public class LoginActivity extends Activity {
             startActivity(new Intent(this,MapsActivity.class));
         }
 
-        //customizing google sign in button
-        SignInButton signInButton = findViewById(R.id.sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-
         //adding listener to google sign in button
-        signInButton.setOnClickListener(new View.OnClickListener() {
+        googleSignInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 googleSignIn();
             }
         });
     }
+
+    /**
+     * Methods for google sign in button
+     */
+
     private void googleSignIn(){
         Intent googleSignInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(googleSignInIntent,RC_SIGN_IN);
@@ -67,8 +78,10 @@ public class LoginActivity extends Activity {
             handleSignInResult(task);
         }
     }
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+    private void handleSignInResult(@NotNull Task<GoogleSignInAccount> completedTask) {
         try {
+            //account variable is for passing information to the next intent
+            //noinspection unused
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
