@@ -3,15 +3,17 @@ package io.bitbucket.technorex.pigeo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,7 +26,7 @@ public class LoginActivity extends Activity {
     private static int RC_SIGN_IN = 100;
     private GoogleSignInClient mGoogleSignInClient;
     @SuppressWarnings("FieldCanBeLocal")
-    private SignInButton googleSignInButton;
+    private Button googleSignInButton;
     @SuppressWarnings("FieldCanBeLocal")
     private GoogleSignInOptions gso;
 
@@ -50,6 +52,16 @@ public class LoginActivity extends Activity {
         if(account!=null){
             startActivity(new Intent(this,MapsActivity.class));
         }
+
+        //for signout from google id. Please do not delete this comment
+        /*mGoogleSignInClient.signOut()
+                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+
+                        }
+                    });
+         */
 
         //adding listener to google sign in button
         googleSignInButton.setOnClickListener(new View.OnClickListener() {
