@@ -1,34 +1,31 @@
-package io.bitbucket.technorex.pigeo;
+package io.bitbucket.technorex.pigeo.activities;
 
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import io.bitbucket.technorex.pigeo.R;
 import org.jetbrains.annotations.NotNull;
-
-/**Project Pigeo
- * @author Sihan Tawsik, Samnan Rahee
- * Copyright TechnoRex Team
- */
 
 public class LoginActivity extends Activity {
     private static int RC_SIGN_IN = 100;
     private GoogleSignInClient mGoogleSignInClient;
-    @SuppressWarnings("FieldCanBeLocal")
-    private Button googleSignInButton;
+    private Button googleSignInButton,emailSignInButton;
     @SuppressWarnings("FieldCanBeLocal")
     private GoogleSignInOptions gso;
+    private EditText email,password;
+    private TextView forgotPassword,signUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +33,15 @@ public class LoginActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         //initializing variables
-        gso = new GoogleSignInOptions
-                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail().build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
-        googleSignInButton = findViewById(R.id.google_sign_in_button);
-        /*Sign In with email button*/
+        bindVariables();
 
+        /*Sign In with email button*/
+        emailSignInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         /*Google Sign In button*/
         //checking for a previous logged in session
@@ -71,6 +70,24 @@ public class LoginActivity extends Activity {
             }
         });
     }
+
+    /**
+     * Method for initializing variables
+     */
+
+    private void bindVariables() {
+        gso = new GoogleSignInOptions
+                .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail().build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+        googleSignInButton = findViewById(R.id.google_sign_in_button);
+        email=findViewById(R.id.logInEmail);
+        password=findViewById(R.id.logInPassword);
+        emailSignInButton=findViewById(R.id.email_sign_in);
+        forgotPassword=findViewById(R.id.forgotPassword);
+        signUp=findViewById(R.id.signUp);
+    }
+
 
     /**
      * Methods for google sign in button
