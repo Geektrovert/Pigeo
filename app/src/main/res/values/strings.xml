@@ -9,5 +9,7 @@
     <string name="sign_in">Sign In</string>
     <string name="sign_up">Sign Up</string>
     <string name="have_an_account">Have an Account?</string>
+    <string name="required">Field can\'t be empty</string>
+    <string name="error">An error occurred while signing in</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
 </resources>
