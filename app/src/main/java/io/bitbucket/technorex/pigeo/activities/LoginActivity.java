@@ -1,7 +1,9 @@
 package io.bitbucket.technorex.pigeo.activities;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -66,6 +68,22 @@ public class LoginActivity extends Activity {
         super.onStart();
         email.setText("");
         password.setText("");
+    }
+
+    @Override
+    public void onBackPressed() {
+        /*Dialogue when back button pressed*/
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.exit_title)
+                .setMessage(R.string.exit_message)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishAffinity();
+                    }
+                })
+                .setNegativeButton(R.string.no,null)
+                .show();
     }
 
     private void checkIfSignedIn() {

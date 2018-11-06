@@ -11,5 +11,9 @@
     <string name="have_an_account">Have an Account?</string>
     <string name="required">Field can\'t be empty</string>
     <string name="error">An error occurred while signing in</string>
+    <string name="exit_title">Exit App</string>
+    <string name="exit_message">Are you sure you want to exit?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
 </resources>
