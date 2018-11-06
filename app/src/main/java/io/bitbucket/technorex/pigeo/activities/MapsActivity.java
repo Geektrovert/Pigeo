@@ -1,5 +1,7 @@
 package io.bitbucket.technorex.pigeo.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
@@ -30,6 +32,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        /*Dialogue when back button pressed*/
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.exit_title)
+                .setMessage(R.string.exit_message)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        finishAffinity();
+                    }
+                })
+                .setNegativeButton(R.string.no,null)
+                .show();
+    }
 
     /**
      * Manipulates the map once available.
