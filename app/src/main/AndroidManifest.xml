@@ -45,10 +45,10 @@
                 android:name=".activities.MapsActivity"
                 android:label="@string/title_activity_maps">
         </activity>
-        <activity android:name=".activities.SignUpActivity1">
-        </activity>
-        <activity android:name=".activities.SignUpActivity2">
-        </activity>
+        <activity android:name=".activities.SignUpActivity1"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.SignUpActivity2"
+                  android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

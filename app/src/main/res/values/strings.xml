@@ -16,4 +16,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="next">Next</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="full_name">Full Name</string>
+    <string name="national_id">National ID</string>
 </resources>
