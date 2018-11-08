@@ -6,6 +6,7 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -233,7 +234,7 @@ public class LoginActivity extends Activity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            startActivity(new Intent(this,MapsActivity.class));
+            startActivity(new Intent(this,MapsActivity.class).putExtra("client", (Parcelable) mGoogleSignInClient));
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.

@@ -21,4 +21,7 @@
     <string name="phone_number">Phone Number</string>
     <string name="full_name">Full Name</string>
     <string name="national_id">National ID</string>
+    <string name="sos">SOS</string>
+    <string name="settings">settings</string>
+    <string name="user">user</string>
 </resources>

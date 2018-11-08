@@ -2,15 +2,22 @@ package io.bitbucket.technorex.pigeo.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.support.design.internal.BottomNavigationItemView;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import android.view.View;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
 
 /**Project Pigeo
@@ -20,16 +27,36 @@ import io.bitbucket.technorex.pigeo.R;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
+    private GoogleSignInClient googleSignInClient;
+    private Object client;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        if(getIntent().getExtras()!=null){
+            client=getIntent().getExtras().get("client");
+        }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+        //bindWidgets();
+    }
+
+    private void bindWidgets() {
+        BottomNavigationItemView bottomNavigationItemView = findViewById(R.id.user_icon);
+        bottomNavigationItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Profile profile = new Profile();
+                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MapsActivity.this);
+                googleSignInClient=GoogleSignIn.getClient(MapsActivity.this,(GoogleSignInOptions) client);
+                if(account!=null){
+                    profile.logOut(googleSignInClient,MapsActivity.this,MapsActivity.this);
+                }
+            }
+        });
     }
 
     @Override
