@@ -93,7 +93,7 @@ public class LoginActivity extends Activity {
 
         //if there is a previous session redirect to map activity
         if(account!=null){
-            startActivity(new Intent(this,MapsActivity.class));
+            startActivity(new Intent(this,MapsActivity.class).putExtra("client", (Parcelable) mGoogleSignInClient));
         }
 
         /*Email Account*/
@@ -160,7 +160,7 @@ public class LoginActivity extends Activity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
                             progressDialog.dismiss();
-                            startActivity(new Intent(LoginActivity.this,MapsActivity.class));
+                            startActivity(new Intent(LoginActivity.this,MapsActivity.class).putExtra("client", (Parcelable) mGoogleSignInClient));
                         }
                         else{
                             progressDialog.dismiss();
