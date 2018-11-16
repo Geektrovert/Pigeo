@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DbHelper extends SQLiteOpenHelper {
     //version will be updated in course of time
-    private static final int DB_VERSION=1;
+    private static final int DB_VERSION=2;
 
     private static final String DB_NAME = "Pigeo.db";
 
@@ -24,7 +24,29 @@ public class DbHelper extends SQLiteOpenHelper {
                 "       contact_number TEXT" +
                 "   )";
 
+        String createTableProfile
+                = "CREATE TABLE PROFILE (" +
+                "       _id INTEGER PRIMARY KEY," +
+                "       user_name TEXT," +
+                "       email_id TEXT," +
+                "       password_hash TEXT," +
+                "       national_id TEXT," +
+                "       phone_no TEXT" +
+                "   )";
+
+        String initializeProfile
+                = "INSERT INTO PROFILE VALUES (" +
+                "       '1'," +
+                "       '-1-1'," +
+                "       '-1'," +
+                "       '-1'," +
+                "       '-1'," +
+                "       '-1'" +
+                "   )";
+
         sqLiteDatabase.execSQL(createTableContact);
+        sqLiteDatabase.execSQL(createTableProfile);
+        sqLiteDatabase.execSQL(initializeProfile);
     }
 
     @Override

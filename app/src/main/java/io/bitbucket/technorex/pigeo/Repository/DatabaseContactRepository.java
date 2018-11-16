@@ -59,6 +59,24 @@ public class DatabaseContactRepository implements ContactRepository{
         }
     }
 
+    @Override
+    public Contact retrieveContact(int id) {
+        Contact contact=null;
+        try(SQLiteDatabase db = new DbHelper(context).getReadableDatabase()) {
+            Cursor cursor = db
+                    .query("CONTACTS", null, "_id=?", new String[]{Integer.toString(id)}, null, null, null);
+            while (cursor.moveToNext()) {
+                contact = new Contact(
+                        cursor.getString(cursor.getColumnIndexOrThrow("contact_name")),
+                        cursor.getString(cursor.getColumnIndexOrThrow("contact_number")),
+                        cursor.getInt(cursor.getColumnIndexOrThrow("_id"))
+                );
+            }
+            cursor.close();
+        }
+        return contact;
+    }
+
     @NonNull
     private ContentValues getContentValues(Contact contact) {
         ContentValues values = new ContentValues();

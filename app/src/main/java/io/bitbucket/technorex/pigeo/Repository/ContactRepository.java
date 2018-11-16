@@ -13,4 +13,6 @@ public interface ContactRepository {
     void deleteContact(Contact contact);
 
     void updateContact(Contact contact);
+
+    Contact retrieveContact(int id);
 }
