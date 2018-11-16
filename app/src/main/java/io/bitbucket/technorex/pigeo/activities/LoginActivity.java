@@ -26,7 +26,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
+import io.bitbucket.technorex.pigeo.Repository.ProfileRepository;
 import io.bitbucket.technorex.pigeo.Service.ProfileDatabaseService;
+import io.bitbucket.technorex.pigeo.Service.ProfileServerService;
 import org.jetbrains.annotations.NotNull;
 
 public class LoginActivity extends Activity {
@@ -157,7 +159,7 @@ public class LoginActivity extends Activity {
                         if(task.isSuccessful()){
                             Profile profile = getCurrentProfile(email);
                             progressDialog.dismiss();
-                            startActivity(new Intent(LoginActivity.this,MapsActivity.class));
+                            startActivity(new Intent(LoginActivity.this,MapsActivity.class).putExtra("profile",profile));
                         }
                         else{
                             progressDialog.dismiss();
@@ -170,8 +172,17 @@ public class LoginActivity extends Activity {
 
     @NonNull
     private Profile getCurrentProfile(String email) {
-
-        return new Profile();
+        final Profile[] profile = {null};
+        ProfileServerService profileServerService = new ProfileServerService();
+        profileServerService.retrieveProfile(email, new ProfileRepository.OnResultListener<Profile>() {
+            @Override
+            public void onResult(Profile data) {
+                profile[0] =data;
+                ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(LoginActivity.this);
+                profileDatabaseService.updateProfile(data);
+            }
+        });
+        return profile[0];
     }
 
     /**

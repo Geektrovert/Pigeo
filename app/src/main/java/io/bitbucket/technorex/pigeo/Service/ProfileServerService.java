@@ -9,7 +9,7 @@ import java.util.List;
 
 public class ProfileServerService {
         private ProfileRepository profileRepository;
-        public ProfileServerService(Context context){
+        public ProfileServerService(){
             profileRepository=new ServerProfileRepository();
         }
         public Profile retrieveProfile(){
