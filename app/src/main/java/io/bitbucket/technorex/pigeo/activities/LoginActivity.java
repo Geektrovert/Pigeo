@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -14,17 +13,23 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
+import io.bitbucket.technorex.pigeo.Repository.ProfileRepository;
+import io.bitbucket.technorex.pigeo.Service.ProfileDatabaseService;
+import io.bitbucket.technorex.pigeo.Service.ProfileServerService;
 import org.jetbrains.annotations.NotNull;
 
 public class LoginActivity extends Activity {
@@ -51,17 +56,6 @@ public class LoginActivity extends Activity {
 
         //checking for a previous logged in session
         checkIfSignedIn();
-
-        //for signout from google id. Please do not delete this comment
-        /*mGoogleSignInClient.signOut()
-                    .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-
-                        }
-                    });
-         */
-
     }
 
     @Override
@@ -93,16 +87,21 @@ public class LoginActivity extends Activity {
 
         //if there is a previous session redirect to map activity
         if(account!=null){
-            startActivity(new Intent(this,MapsActivity.class).putExtra("client", (Parcelable) mGoogleSignInClient));
+            ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(this);
+            Profile profile = profileDatabaseService.retrieveProfile();
+            //profile.setmGoogleSignInClient(mGoogleSignInClient);
+            startActivity(new Intent(this,MapsActivity.class).putExtra("profile",profile));
         }
 
         /*Email Account*/
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //if there is a previous session redirect to map activity
         if(firebaseUser!=null){
+            ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(this);
+            Profile profile = profileDatabaseService.retrieveProfile();
             Intent intent = new Intent(LoginActivity.this,MapsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
+            startActivity(intent.putExtra("profile",profile));
         }
     }
 
@@ -152,15 +151,16 @@ public class LoginActivity extends Activity {
      * @param password String
      */
 
-    private void emailSignIn(String email,String password) {
+    private void emailSignIn(final String email, String password) {
         //signing in with email
         firebaseAuth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
+                            Profile profile = getCurrentProfile(email);
                             progressDialog.dismiss();
-                            startActivity(new Intent(LoginActivity.this,MapsActivity.class).putExtra("client", (Parcelable) mGoogleSignInClient));
+                            startActivity(new Intent(LoginActivity.this,MapsActivity.class).putExtra("profile",profile));
                         }
                         else{
                             progressDialog.dismiss();
@@ -169,6 +169,21 @@ public class LoginActivity extends Activity {
                         }
                     }
                 });
+    }
+
+    @NonNull
+    private Profile getCurrentProfile(String email) {
+        final Profile[] profile = {null};
+        ProfileServerService profileServerService = new ProfileServerService();
+        profileServerService.retrieveProfile(email, new ProfileRepository.OnResultListener<Profile>() {
+            @Override
+            public void onResult(Profile data) {
+                profile[0] =data;
+                ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(LoginActivity.this);
+                profileDatabaseService.updateProfile(data);
+            }
+        });
+        return profile[0];
     }
 
     /**
@@ -198,6 +213,10 @@ public class LoginActivity extends Activity {
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+//        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+//                .build();
+//        mGoogleApiClient.connect();
         googleSignInButton = findViewById(R.id.google_sign_in_button);
         email=findViewById(R.id.logInEmail);
         password=findViewById(R.id.logInPassword);
@@ -234,7 +253,9 @@ public class LoginActivity extends Activity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            startActivity(new Intent(this,MapsActivity.class).putExtra("client", (Parcelable) mGoogleSignInClient));
+            ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(this);
+            Profile profile = profileDatabaseService.retrieveProfile();
+            startActivity(new Intent(this,MapsActivity.class).putExtra("profile",profile));
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
