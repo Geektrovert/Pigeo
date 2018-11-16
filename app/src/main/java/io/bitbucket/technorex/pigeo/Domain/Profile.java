@@ -11,14 +11,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import io.bitbucket.technorex.pigeo.activities.LoginActivity;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Profile {
+public class Profile implements Serializable {
     private String userName;
     private String emailID;
     private String passwordHash;
     private String nationalID;
     private String phoneNO;
+    private GoogleSignInClient mGoogleSignInClient;
 
     public Profile(String userName, String emailID, String passwordHash, String nationalID, String phoneNO) {
         this.userName = userName;
@@ -71,6 +73,14 @@ public class Profile {
         this.phoneNO = phoneNO;
     }
 
+    public GoogleSignInClient getmGoogleSignInClient() {
+        return mGoogleSignInClient;
+    }
+
+    public void setmGoogleSignInClient(GoogleSignInClient mGoogleSignInClient) {
+        this.mGoogleSignInClient = mGoogleSignInClient;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -105,12 +115,12 @@ public class Profile {
         FirebaseAuth.getInstance().signOut();
     }
 
-    public void logOut(GoogleSignInClient googleSignInClient, final Activity activity, final Context context) {
-        googleSignInClient.signOut()
+    public void logOut(final Activity activity) {
+        mGoogleSignInClient.signOut()
                 .addOnCompleteListener(activity, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        activity.startActivity(new Intent(context, LoginActivity.class));
+                        activity.finishAffinity();
                     }
         });
     }

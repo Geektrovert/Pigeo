@@ -30,15 +30,14 @@ import io.bitbucket.technorex.pigeo.R;
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    private GoogleSignInClient googleSignInClient;
-    private Object client;
+    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         if (getIntent().getExtras() != null) {
-            client = getIntent().getExtras().get("client");
+            profile = (Profile) getIntent().getExtras().get("profile");
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -53,11 +52,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bottomNavigationItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Profile profile = new Profile();
                 GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MapsActivity.this);
-                googleSignInClient = GoogleSignIn.getClient(MapsActivity.this, (GoogleSignInOptions) client);
                 if (account != null) {
-                    profile.logOut(googleSignInClient, MapsActivity.this, MapsActivity.this);
+                    profile.logOut(MapsActivity.this);
+                }
+                else{
+                    profile.logOut();
                 }
             }
         });

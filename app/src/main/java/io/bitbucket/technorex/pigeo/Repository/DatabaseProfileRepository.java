@@ -1,5 +1,6 @@
 package io.bitbucket.technorex.pigeo.Repository;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -36,6 +37,17 @@ public class DatabaseProfileRepository implements ProfileRepository {
 
     @Override
     public void updateProfile(Profile profile) {
-
+        try (SQLiteDatabase db = new DbHelper(context).getWritableDatabase()){
+            db.update("PROFILE",getContentValues(profile),"id=?",new String[]{"1"});
+        }
+    }
+    private ContentValues getContentValues(Profile profile){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("user_name",profile.getUserName());
+        contentValues.put("email_id",profile.getEmailID());
+        contentValues.put("password_hash",profile.getPasswordHash());
+        contentValues.put("national_id",profile.getNationalID());
+        contentValues.put("phone_no",profile.getPhoneNO());
+        return contentValues;
     }
 }
