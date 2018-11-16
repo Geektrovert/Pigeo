@@ -2,11 +2,12 @@ package io.bitbucket.technorex.pigeo.Domain;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
-import android.support.annotation.NonNull;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import io.bitbucket.technorex.pigeo.activities.LoginActivity;
 import org.jetbrains.annotations.NotNull;
@@ -28,10 +29,9 @@ public class Profile implements Serializable {
         this.passwordHash = passwordHash;
         this.nationalID = nationalID;
         this.phoneNO = phoneNO;
-    }
-    public Profile(){
 
     }
+
 
     public String getUserName() {
         return userName;
@@ -73,14 +73,6 @@ public class Profile implements Serializable {
         this.phoneNO = phoneNO;
     }
 
-    public GoogleSignInClient getmGoogleSignInClient() {
-        return mGoogleSignInClient;
-    }
-
-    public void setmGoogleSignInClient(GoogleSignInClient mGoogleSignInClient) {
-        this.mGoogleSignInClient = mGoogleSignInClient;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -115,13 +107,22 @@ public class Profile implements Serializable {
         FirebaseAuth.getInstance().signOut();
     }
 
-    public void logOut(final Activity activity) {
-        mGoogleSignInClient.signOut()
-                .addOnCompleteListener(activity, new OnCompleteListener<Void>() {
+    public void logOut(final Activity activity,Context context) {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(context)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
+
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
                     @Override
-                    public void onComplete(@NonNull Task<Void> task) {
+                    public void onResult(Status status) {
+                        // ...
                         activity.finishAffinity();
                     }
-        });
+                });
     }
 }

@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -36,8 +37,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        Log.e("------------------->", getIntent().getExtras().toString());
         if (getIntent().getExtras() != null) {
             profile = (Profile) getIntent().getExtras().get("profile");
+            Log.e("------------------->", profile.getEmailID());
         }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -54,7 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MapsActivity.this);
                 if (account != null) {
-                    profile.logOut(MapsActivity.this);
+                    profile.logOut(MapsActivity.this,MapsActivity.this);
                 }
                 else{
                     profile.logOut();

@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
@@ -14,11 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -88,8 +89,8 @@ public class LoginActivity extends Activity {
         if(account!=null){
             ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(this);
             Profile profile = profileDatabaseService.retrieveProfile();
-            profile.setmGoogleSignInClient(mGoogleSignInClient);
-            startActivity(new Intent(this,MapsActivity.class).putExtra("profile", profile));
+            //profile.setmGoogleSignInClient(mGoogleSignInClient);
+            startActivity(new Intent(this,MapsActivity.class).putExtra("profile",profile));
         }
 
         /*Email Account*/
@@ -212,6 +213,10 @@ public class LoginActivity extends Activity {
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestEmail().build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+//        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+//                .build();
+//        mGoogleApiClient.connect();
         googleSignInButton = findViewById(R.id.google_sign_in_button);
         email=findViewById(R.id.logInEmail);
         password=findViewById(R.id.logInPassword);
@@ -248,7 +253,9 @@ public class LoginActivity extends Activity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            startActivity(new Intent(this,MapsActivity.class));
+            ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(this);
+            Profile profile = profileDatabaseService.retrieveProfile();
+            startActivity(new Intent(this,MapsActivity.class).putExtra("profile",profile));
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
