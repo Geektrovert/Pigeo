@@ -4,9 +4,9 @@
     android:layout_height="@dimen/activity_vertical_margin"
     android:layout_width="@dimen/activity_horizontal_margin">
     <gradient
-        android:startColor="#31294A"
-        android:centerColor="#CD4173"
-        android:endColor="#FF7362"
+        android:endColor="#3fdfdf"
+        android:centerColor="#215a6c"
+        android:startColor="#04072d"
         android:angle="90"/>
     <corners
         android:radius="0dp"/>

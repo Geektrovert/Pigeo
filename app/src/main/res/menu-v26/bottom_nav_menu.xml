@@ -4,6 +4,7 @@
     <item android:id="@+id/settings_icon"
           android:title="@string/settings"
           android:icon="@drawable/round_person_24"
+          android:iconTint="@color/colorPrimaryDark"
     />
     <item android:id="@+id/sos"
           android:title="@string/sos"

@@ -9,11 +9,12 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".activities.LoginActivity"
-        android:background="@drawable/gradient">
+        android:background="#004158">
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:gravity="center"
             tools:ignore="UselessParent">
         <ImageView
                 android:layout_width="200dip"
@@ -42,45 +43,55 @@
                 tools:ignore="Autofill"/>
         <Button
                 android:id="@+id/email_sign_in"
-                android:text="@string/log_in"
+                android:text="@string/sign_in"
                 android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="#fafafa"
                 android:background="@drawable/round_button"/>
+
         <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-        android:layout_marginBottom="@dimen/activity_horizontal_margin">
-
+                android:gravity="center"
+                android:layout_marginTop="5dp">
             <TextView
                     android:layout_marginStart="10dp"
                     android:id="@+id/forgotPassword"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/forgot_password"
-                    android:textColor="#fafafa" />
-            <LinearLayout
+                    android:textColor="#fafafa"
+                    android:layout_marginEnd="5dp"/>
+            <TextView
+                    android:id="@+id/recover_password"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center"
-            android:layout_marginStart="60dp">
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/don_t_have_an_account"
-                        android:textColor="#fafafa"/>
-                <TextView
-                        android:id="@+id/signUp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:text="@string/sign_up"
-                        android:textColor="#4095c2"/>
-            </LinearLayout>
-
+                    android:layout_height="match_parent"
+                    android:text="@string/recover_password"
+                    android:textColor="#4095c2"/>
         </LinearLayout>
+        <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/don_t_have_an_account"
+                    android:textColor="#fafafa"
+                    android:layout_marginEnd="5dp"/>
+            <TextView
+                    android:id="@+id/signUp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/sign_up"
+                    android:textColor="#4095c2"/>
+        </LinearLayout>
+
         <Button
                 android:gravity="center"
                 android:id="@+id/google_sign_in_button"
@@ -88,7 +99,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/round_button"
                 android:textColor="#fafafa"
-                android:text="@string/sign_in"
+                android:text="@string/sign_in_with_google"
                 android:drawableStart="@drawable/google_logo"
                 android:drawablePadding="30dp"
                 android:paddingStart="20dp"
