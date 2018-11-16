@@ -170,6 +170,7 @@ public class LoginActivity extends Activity {
 
     @NonNull
     private Profile getCurrentProfile(String email) {
+
         return new Profile();
     }
 
