@@ -253,8 +253,14 @@ public class LoginActivity extends Activity {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
 
             // Signed in successfully, show authenticated UI.
-            ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(this);
-            Profile profile = profileDatabaseService.retrieveProfile();
+            assert account != null;
+            Profile profile = new Profile(
+                    account.getDisplayName(),
+                    account.getEmail(),
+                    "-1",
+                    "-1",
+                    "-1"
+            );
             startActivity(new Intent(this,MapsActivity.class).putExtra("profile",profile));
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

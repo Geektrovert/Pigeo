@@ -46,10 +46,14 @@
                 android:label="@string/title_activity_maps"
                 android:theme="@style/AppTheme.NoActionBar">
         </activity>
-        <activity android:name=".activities.SignUpActivity1"
-                  android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".activities.SignUpActivity2"
-                  android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+                android:name=".activities.SignUpActivity1"
+                android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+                android:name=".activities.SignUpActivity2"
+                android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.ProfileDetailsActivity">
+        </activity>
     </application>
 
 </manifest>

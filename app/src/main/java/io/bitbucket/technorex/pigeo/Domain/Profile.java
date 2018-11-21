@@ -9,7 +9,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
-import io.bitbucket.technorex.pigeo.activities.LoginActivity;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;

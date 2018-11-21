@@ -3,6 +3,7 @@ package io.bitbucket.technorex.pigeo.activities;
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.v4.app.ActivityCompat;
@@ -55,13 +56,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bottomNavigationItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(MapsActivity.this);
-                if (account != null) {
-                    profile.logOut(MapsActivity.this,MapsActivity.this);
-                }
-                else{
-                    profile.logOut();
-                }
+                startActivity(new Intent(MapsActivity.this,ProfileDetailsActivity.class).putExtra("profile",profile));
             }
         });
     }
