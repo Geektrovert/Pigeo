@@ -32,6 +32,11 @@ import io.bitbucket.technorex.pigeo.Service.ProfileDatabaseService;
 import io.bitbucket.technorex.pigeo.Service.ProfileServerService;
 import org.jetbrains.annotations.NotNull;
 
+/**Project Pigeo
+ * @author Sihan Tawsik, Samnan Rahee
+ * Copyright TechnoRex Team
+ */
+
 public class LoginActivity extends Activity {
     private static int RC_SIGN_IN = 100;
     private GoogleSignInClient mGoogleSignInClient;
@@ -180,6 +185,7 @@ public class LoginActivity extends Activity {
             public void onResult(Profile data) {
                 profile[0] =data;
                 ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(LoginActivity.this);
+                profileDatabaseService.reset();
                 profileDatabaseService.updateProfile(data);
             }
         });

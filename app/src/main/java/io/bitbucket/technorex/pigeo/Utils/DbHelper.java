@@ -9,6 +9,7 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final int DB_VERSION=2;
 
     private static final String DB_NAME = "Pigeo.db";
+    private SQLiteDatabase sqLiteDatabase = null;
 
     public DbHelper(Context context){
         super(context,DB_NAME,null,DB_VERSION);
@@ -17,6 +18,9 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         /*TODO: Need to redesign schema after more advancement of the project*/
+
+        this.sqLiteDatabase = sqLiteDatabase;
+
         String createTableContact
                 = "CREATE TABLE CONTACTS (" +
                 "       _id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -34,19 +38,10 @@ public class DbHelper extends SQLiteOpenHelper {
                 "       phone_no TEXT" +
                 "   )";
 
-        String initializeProfile
-                = "INSERT INTO PROFILE VALUES (" +
-                "       '1'," +
-                "       '-1-1'," +
-                "       '-1'," +
-                "       '-1'," +
-                "       '-1'," +
-                "       '-1'" +
-                "   )";
 
-        sqLiteDatabase.execSQL(createTableContact);
-        sqLiteDatabase.execSQL(createTableProfile);
-        sqLiteDatabase.execSQL(initializeProfile);
+
+        this.sqLiteDatabase.execSQL(createTableContact);
+        this.sqLiteDatabase.execSQL(createTableProfile);
     }
 
     @Override

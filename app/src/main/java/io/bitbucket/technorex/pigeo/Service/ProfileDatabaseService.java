@@ -19,4 +19,5 @@ public class ProfileDatabaseService {
     public void updateProfile(Profile profile){
         profileRepository.updateProfile(profile);
     }
+    public void reset(){profileRepository.reset();}
 }

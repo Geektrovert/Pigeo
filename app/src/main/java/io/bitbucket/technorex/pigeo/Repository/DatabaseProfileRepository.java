@@ -72,6 +72,24 @@ public class DatabaseProfileRepository implements ProfileRepository {
         resultListener.onResult(retrieveProfile());
     }
 
+    @Override
+    public void reset() {
+
+        String initializeProfile
+                = "INSERT INTO PROFILE VALUES (" +
+                "       '1'," +
+                "       '-1-1'," +
+                "       '-1'," +
+                "       '-1'," +
+                "       '-1'," +
+                "       '-1'" +
+                "   )";
+
+        try (SQLiteDatabase db = new DbHelper(context).getWritableDatabase()){
+            db.execSQL(initializeProfile);
+        }
+    }
+
     private ContentValues getContentValues(Profile profile){
         ContentValues contentValues = new ContentValues();
         contentValues.put("user_name",profile.getUserName());

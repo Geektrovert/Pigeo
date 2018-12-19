@@ -14,6 +14,8 @@ public interface ProfileRepository {
 
     void retrieveProfile(String email,OnResultListener<Profile> resultListener);
 
+    void reset();
+
     interface OnResultListener<T> {
 
         void onResult(T data);

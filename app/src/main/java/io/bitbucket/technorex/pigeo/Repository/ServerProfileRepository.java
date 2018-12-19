@@ -59,4 +59,9 @@ public class ServerProfileRepository implements ProfileRepository {
     public void updateProfile(Profile profile) {
 
     }
+
+    @Override
+    public void reset() {
+
+    }
 }
