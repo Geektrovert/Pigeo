@@ -1,4 +1,105 @@
 package io.bitbucket.technorex.pigeo.Repository;
 
-public class ServerContactRepository {
+import android.support.annotation.NonNull;
+import android.util.Log;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+import io.bitbucket.technorex.pigeo.Domain.Contact;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class ServerContactRepository implements ContactRepository{
+    private static final String DB_COLLECTION_NAME = "Contacts";
+    private static final String LOG_TAG = "Pigeo";
+
+    private FirebaseFirestore db;
+
+    public ServerContactRepository() {
+        db = FirebaseFirestore.getInstance();
+    }
+
+    @Override
+    public List<Contact> listContacts() {
+        throw new RuntimeException("Wrong method");
+    }
+
+    public void listContactsAsync(final ContactRepository.OnResultListener<List<Contact>> resultListener) {
+        db.collection(DB_COLLECTION_NAME)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        List<Contact> cards = new ArrayList<>();
+
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            cards.add(document.toObject(Contact.class));
+                        }
+
+                        resultListener.onResult(cards);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(LOG_TAG, "Failed to retrieve cards.", e);
+                    }
+                });
+    }
+
+    @Override
+    public void addContact(Contact contact) {
+        saveContact(contact);
+    }
+
+
+    @Override
+    public void deleteContact(final Contact contact) {
+        db.collection(DB_COLLECTION_NAME)
+                .document(Integer.toString(contact.getId()))
+                .delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.i(LOG_TAG, "Contact deleted successfully from FireStore: " + contact);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(LOG_TAG, "Failed to delete contact: " + contact, e);
+                    }
+                });
+    }
+
+    @Override
+    public void updateContact(Contact contact) {
+        saveContact(contact);
+    }
+
+    @Override
+    public Contact retrieveContact(int id) {
+        return null;
+    }
+
+    private void saveContact(final Contact contact) {
+        db.collection(DB_COLLECTION_NAME)
+                .document(Integer.toString(contact.getId()))
+                .set(contact)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.i(LOG_TAG, "Card saved successfully to FireStore: " + contact);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(LOG_TAG, "Failed to save card: " + contact, e);
+                    }
+                });
+    }
 }

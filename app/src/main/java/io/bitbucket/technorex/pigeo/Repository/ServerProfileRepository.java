@@ -12,7 +12,7 @@ import io.bitbucket.technorex.pigeo.Domain.Profile;
 import java.util.List;
 
 public class ServerProfileRepository implements ProfileRepository {
-    private final String DB_COLLECTION_NAME = "profile";
+    private final String DB_COLLECTION_NAME = "Profile";
     private final String LOG_TAG = "Pigeo";
     private FirebaseFirestore firebaseFirestore;
 

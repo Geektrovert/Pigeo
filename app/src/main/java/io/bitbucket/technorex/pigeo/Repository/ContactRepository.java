@@ -15,4 +15,10 @@ public interface ContactRepository {
     void updateContact(Contact contact);
 
     Contact retrieveContact(int id);
+
+    interface OnResultListener<T> {
+
+        void onResult(T data);
+
+    }
 }
