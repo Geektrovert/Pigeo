@@ -15,12 +15,12 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Profile implements Serializable {
+    private int id;
     private String userName;
     private String emailID;
     private String passwordHash;
     private String nationalID;
     private String phoneNO;
-    private GoogleSignInClient mGoogleSignInClient;
 
     public Profile(String userName, String emailID, String passwordHash, String nationalID, String phoneNO) {
         this.userName = userName;
@@ -28,8 +28,10 @@ public class Profile implements Serializable {
         this.passwordHash = passwordHash;
         this.nationalID = nationalID;
         this.phoneNO = phoneNO;
-
+        this.id=1;
     }
+
+    public Profile() {}
 
 
     public String getUserName() {
@@ -104,24 +106,5 @@ public class Profile implements Serializable {
 
     public void logOut() {
         FirebaseAuth.getInstance().signOut();
-    }
-
-    public void logOut(final Activity activity,Context context) {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(context)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        mGoogleApiClient.connect();
-
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // ...
-                        activity.finishAffinity();
-                    }
-                });
     }
 }

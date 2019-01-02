@@ -35,6 +35,7 @@ public class ServerProfileRepository implements ProfileRepository {
                         Profile dummy=null;
                         for(QueryDocumentSnapshot document : queryDocumentSnapshots) {
                             dummy = document.toObject(Profile.class);
+                            Log.e("--------DummyMail--->>>", dummy.toString());
                             if (dummy.getEmailID().equals(email)) {
                                 break;
                             }

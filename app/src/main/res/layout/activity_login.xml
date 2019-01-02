@@ -91,19 +91,6 @@
                     android:text="@string/sign_up"
                     android:textColor="#4095c2"/>
         </LinearLayout>
-
-        <Button
-                android:gravity="center"
-                android:id="@+id/google_sign_in_button"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/round_button"
-                android:textColor="#fafafa"
-                android:text="@string/sign_in_with_google"
-                android:drawableStart="@drawable/google_logo"
-                android:drawablePadding="30dp"
-                android:paddingStart="20dp"
-                android:paddingEnd="60dp"/>
     </LinearLayout>
 
 </ScrollView>

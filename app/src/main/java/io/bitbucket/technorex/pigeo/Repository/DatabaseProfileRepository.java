@@ -92,6 +92,7 @@ public class DatabaseProfileRepository implements ProfileRepository {
 
     private ContentValues getContentValues(Profile profile){
         ContentValues contentValues = new ContentValues();
+        contentValues.put("_id", "1");
         contentValues.put("user_name",profile.getUserName());
         contentValues.put("email_id",profile.getEmailID());
         contentValues.put("password_hash",profile.getPasswordHash());
