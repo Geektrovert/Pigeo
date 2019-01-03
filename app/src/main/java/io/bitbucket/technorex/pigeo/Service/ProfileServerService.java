@@ -1,14 +1,14 @@
 package io.bitbucket.technorex.pigeo.Service;
 
-import android.content.Context;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
+import io.bitbucket.technorex.pigeo.Domain.UserCount;
 import io.bitbucket.technorex.pigeo.Repository.ProfileRepository;
 import io.bitbucket.technorex.pigeo.Repository.ServerProfileRepository;
 
 import java.util.List;
 
 public class ProfileServerService {
-        private ProfileRepository profileRepository;
+        private ServerProfileRepository profileRepository;
         public ProfileServerService(){
             profileRepository=new ServerProfileRepository();
         }
@@ -22,4 +22,8 @@ public class ProfileServerService {
         public void updateProfile(Profile profile){
             profileRepository.updateProfile(profile);
         }
+        public void getUserCount(UserCount userCount, ProfileRepository.OnResultListener<UserCount> resultListener){
+            profileRepository.userCount(userCount,resultListener);
+        }
+        public void incrementUser(UserCount userCount){profileRepository.incrementUser(userCount);}
 }

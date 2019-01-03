@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
+import io.bitbucket.technorex.pigeo.Domain.UserCount;
 
 import java.util.List;
 
@@ -82,5 +83,48 @@ public class ServerProfileRepository implements ProfileRepository {
     @Override
     public void reset() {
 
+    }
+
+    public void userCount(final UserCount userCount,final OnResultListener<UserCount> resultListener){
+        firebaseFirestore
+                .collection("UserCount")
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        UserCount dummy = null;
+                        for(QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            dummy= document.toObject(UserCount.class);
+                            break;
+                        }
+                        resultListener.onResult(dummy);
+                    }
+
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(LOG_TAG, "Failed to retrieve profile count.", e);
+                    }
+                });
+    }
+
+    public void incrementUser(UserCount userCount){
+        userCount.setNumber(userCount.getNumber()+1);
+        firebaseFirestore.collection("UserCount")
+                .document("UserNumber")
+                .set(userCount)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.e("***-----Server--->>>", "user count Update successful!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("***-----Server--->>>", "user count Update failed!");
+                    }
+                });
     }
 }
