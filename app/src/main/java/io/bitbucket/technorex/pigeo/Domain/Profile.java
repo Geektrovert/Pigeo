@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Profile implements Serializable {
-    private String id;
+    private String id="1";
     private String userName;
     private String emailID;
     private String passwordHash;
@@ -28,7 +28,6 @@ public class Profile implements Serializable {
         this.passwordHash = passwordHash;
         this.nationalID = nationalID;
         this.phoneNO = phoneNO;
-        this.id="1";
     }
 
     public Profile() {}
