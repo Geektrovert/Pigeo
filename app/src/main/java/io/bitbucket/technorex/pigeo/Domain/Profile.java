@@ -15,7 +15,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Profile implements Serializable {
-    private int id;
+    private String id;
     private String userName;
     private String emailID;
     private String passwordHash;
@@ -28,7 +28,7 @@ public class Profile implements Serializable {
         this.passwordHash = passwordHash;
         this.nationalID = nationalID;
         this.phoneNO = phoneNO;
-        this.id=1;
+        this.id="1";
     }
 
     public Profile() {}
@@ -72,6 +72,14 @@ public class Profile implements Serializable {
 
     public void setPhoneNO(String phoneNO) {
         this.phoneNO = phoneNO;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     @Override

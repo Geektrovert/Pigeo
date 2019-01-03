@@ -58,7 +58,25 @@ public class ServerProfileRepository implements ProfileRepository {
 
     @Override
     public void updateProfile(Profile profile) {
+        saveProfile(profile);
+    }
 
+    private void saveProfile(Profile profile) {
+        firebaseFirestore.collection(DB_COLLECTION_NAME)
+                .document("User"+ profile.getId())
+                .set(profile)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.e("***-----Server--->>>", "Update successful!");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("***-----Server--->>>", "Update failed!");
+                    }
+                });
     }
 
     @Override

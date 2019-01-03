@@ -1,8 +1,11 @@
 package io.bitbucket.technorex.pigeo.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -38,7 +41,7 @@ public class ProfileDetailsActivity extends Activity {
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 if(firebaseUser != null) {
                     profile.logOut();
-                    finish();
+                    startActivity(new Intent(ProfileDetailsActivity.this, LoginActivity.class));
                 }
             }
         });
@@ -47,7 +50,6 @@ public class ProfileDetailsActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        Log.e("***------>>>", profile.toString());
         nameLabel.setText(profile.getUserName());
         emailLabel.setText(profile.getEmailID());
         nationalIdLabel.setText(profile.getNationalID());
@@ -59,5 +61,18 @@ public class ProfileDetailsActivity extends Activity {
         super.onRestart();
         DatabaseProfileRepository databaseProfileRepository = new DatabaseProfileRepository(this);
         profile = databaseProfileRepository.retrieveProfile();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.profile_edit, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.edit_profile)
+            startActivity(new Intent(ProfileDetailsActivity.this, EditProfileActivity.class).putExtra("profile", profile));
+        return super.onOptionsItemSelected(item);
     }
 }

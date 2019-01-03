@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:context=".activities.EditProfileActivity">
+	<LinearLayout android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:orientation="vertical">
+
+		<TextView android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:labelFor="@+id/edit_name"
+				  android:text="@string/name"/>
+		<EditText android:id="@+id/edit_name"
+				  android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:inputType="textPersonName"
+				  android:importantForAutofill="no"
+				  tools:targetApi="o"
+		/>
+
+		<TextView android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:labelFor="@+id/edit_password"
+				  android:text="@string/new_password"/>
+		<EditText android:id="@+id/edit_password"
+				  android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:inputType="textPassword"
+				  android:importantForAutofill="no"
+				  tools:targetApi="o"/>
+		<TextView android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:labelFor="@+id/confirm_edit_password"
+				  android:text="@string/confirm_new_password"/>
+		<EditText android:id="@+id/confirm_edit_password"
+				  android:layout_width="match_parent"
+				  android:layout_height="match_parent"
+				  android:inputType="textPassword"
+				  android:importantForAutofill="no"
+				  tools:targetApi="o"/>
+		<TextView android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:labelFor="@+id/current_password"
+				  android:text="@string/current_password"/>
+		<EditText android:id="@+id/current_password"
+				  android:layout_width="match_parent"
+				  android:layout_height="match_parent"
+				  android:inputType="textPassword"
+				  android:importantForAutofill="no"
+				  tools:targetApi="o"/>
+
+
+
+		<TextView android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:labelFor="@+id/edit_phone_no"
+				  android:text="@string/phone_number"/>
+		<EditText
+				android:id="@+id/edit_phone_no"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:inputType="phone"
+				android:maxLength="14"
+				android:importantForAutofill="no"
+				tools:targetApi="o"/>
+
+		<TextView android:layout_width="match_parent"
+				  android:layout_height="wrap_content"
+				  android:labelFor="@+id/edit_national_id"
+				  android:text="@string/phone_number"/>
+		<EditText
+				android:id="@+id/edit_national_id"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:inputType="number"
+				android:maxLength="10"
+				android:importantForAutofill="no"
+				tools:targetApi="o"/>
+
+		<LinearLayout android:layout_width="match_parent"
+					  android:layout_height="wrap_content"
+					  android:orientation="horizontal"
+					  android:gravity="center">
+			<Button style="?android:attr/buttonBarButtonStyle"
+					android:id="@+id/cancel"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/cancel"
+					android:textColor="#ae2c2c"
+					android:layout_margin="10dp"/>
+			<Button style="?android:attr/buttonBarButtonStyle"
+					android:id="@+id/save"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/save"
+					android:textColor="#229938"
+					android:layout_margin="10dp"/>
+
+		</LinearLayout>
+	</LinearLayout>
+
+</ScrollView>
