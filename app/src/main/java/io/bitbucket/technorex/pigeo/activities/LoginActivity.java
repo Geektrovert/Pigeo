@@ -160,22 +160,6 @@ public class LoginActivity extends Activity {
                 });
     }
 
-    @NonNull
-    private Profile getCurrentProfile(String email) {
-        final Profile[] profile = {null};
-        ProfileServerService profileServerService = new ProfileServerService();
-        profileServerService.retrieveProfile(email, new ProfileRepository.OnResultListener<Profile>() {
-            @Override
-            public void onResult(Profile data) {
-                profile[0] =data;
-//                ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(LoginActivity.this);
-//                profileDatabaseService.reset();
-//                profileDatabaseService.updateProfile(data);
-            }
-        });
-        return profile[0];
-    }
-
     /**
      * Method for validating inputs
      * @return boolean

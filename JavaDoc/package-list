@@ -1,1 +1,5 @@
+io.bitbucket.technorex.pigeo.Domain
+io.bitbucket.technorex.pigeo.Repository
+io.bitbucket.technorex.pigeo.Service
+io.bitbucket.technorex.pigeo.Utils
 io.bitbucket.technorex.pigeo.activities

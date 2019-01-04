@@ -177,6 +177,7 @@ public class EditProfileActivity extends Activity {
     }
 
     private boolean validateCurrentPassword(EditText editText) {
+        Log.e("---PASS----->>>", Integer.toString(editText.getText().toString().hashCode()));
         return Integer.toString(editText.getText().toString().hashCode()).equals(profile.getPasswordHash());
     }
 }
