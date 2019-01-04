@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
+import io.bitbucket.technorex.pigeo.Service.ProfileDatabaseService;
 import io.bitbucket.technorex.pigeo.Service.ProfileServerService;
 
 import java.util.Objects;
@@ -31,8 +32,6 @@ public class EditProfileActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
-        if(getIntent().getExtras() != null)
-            profile = (Profile)getIntent().getExtras().get("profile");
         bindWidgets();
         bindListeners();
     }
@@ -46,12 +45,16 @@ public class EditProfileActivity extends Activity {
         newPassword = findViewById(R.id.edit_password);
         confirmNewPassword = findViewById(R.id.confirm_edit_password);
         currentPassword = findViewById(R.id.current_password);
+    }
 
-        if(profile != null) {
-            name.setText(profile.getUserName());
-            phoneNO.setText((profile.getPhoneNO()));
-            nationalID.setText(profile.getNationalID());
-        }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(this);
+        profile = profileDatabaseService.retrieveProfile();
+        name.setText(profile.getUserName());
+        phoneNO.setText((profile.getPhoneNO()));
+        nationalID.setText(profile.getNationalID());
     }
 
     private void bindListeners() {
@@ -81,21 +84,26 @@ public class EditProfileActivity extends Activity {
     }
 
     private void onSave() {
+        /// CHECK IF ANY DATA FIELD IS EMPTY
         if(validateInput(new EditText[]{name, phoneNO, nationalID, currentPassword})) {
-            updateInfo();
+            /// CHECK IF CURRENT PASSWORD IS CORRECT
+            if(validateCurrentPassword(currentPassword)) {
 
-            Log.e("-----VALIDATION--->>>", Integer.toString(validatePassword()));
-            if (validatePassword() == 0) {
-                updatePassword(currentPassword.getText().toString());
+                updateInfo();
+
+                Log.e("-----VALIDATION--->>>", Integer.toString(validatePassword()));
+                if (validatePassword() == 0) {
+                    updatePassword(currentPassword.getText().toString());
+                } else if (validatePassword() == 3)
+                    Toast.makeText(this, "Passwords don't match", Toast.LENGTH_LONG).show();
+                else if (validatePassword() == 2)
+                    Toast.makeText(this, "One or more fields are empty!", Toast.LENGTH_LONG).show();
+                else {
+                    Toast.makeText(this, "Changes saved successfully!", Toast.LENGTH_LONG).show();
+                    finish();
+                }
             }
-            else if (validatePassword() == 3)
-                Toast.makeText(this, "Passwords don't match", Toast.LENGTH_LONG).show();
-            else if (validatePassword() == 2)
-                Toast.makeText(this, "One or more fields are empty!", Toast.LENGTH_LONG).show();
-            else {
-                Toast.makeText(this, "Changes saved successfully!", Toast.LENGTH_LONG).show();
-                finish();
-            }
+            else Toast.makeText(this, "Current password not correct!", Toast.LENGTH_LONG).show();
         }
         else {
             Toast.makeText(this, "One or more fields are empty!", Toast.LENGTH_LONG).show();
@@ -108,7 +116,8 @@ public class EditProfileActivity extends Activity {
         profile.setPhoneNO(phoneNO.getText().toString());
         profile.setUserName(name.getText().toString());
         profileServerService.updateProfile(profile);
-
+        ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(this);
+        profileDatabaseService.updateProfile(profile);
     }
 
     private void updatePassword(String currentPassword) {
@@ -126,8 +135,15 @@ public class EditProfileActivity extends Activity {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
                                             profile.setPasswordHash(Integer.toString(pass.hashCode()));
+
+                                            /// Updating data in Firebase firestore
                                             ProfileServerService profileServerService = new ProfileServerService();
                                             profileServerService.updateProfile(profile);
+
+                                            /// Updating data in SQLite
+                                            ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(EditProfileActivity.this);
+                                            profileDatabaseService.updateProfile(profile);
+
                                             Log.e("***-----SUCCESS--->>>", "Password updated");
                                             Toast.makeText(EditProfileActivity.this, "Changes saved successfully!", Toast.LENGTH_LONG).show();
                                             finish();
@@ -158,5 +174,9 @@ public class EditProfileActivity extends Activity {
         if(pass.isEmpty() || conPass.isEmpty()) return 2;
         if(!pass.equals(conPass)) return 3;
         return 0;
+    }
+
+    private boolean validateCurrentPassword(EditText editText) {
+        return Integer.toString(editText.getText().toString().hashCode()).equals(profile.getPasswordHash());
     }
 }

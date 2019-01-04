@@ -79,15 +79,13 @@ public class LoginActivity extends Activity {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         //if there is a previous session redirect to map activity
         if(firebaseUser!=null){
-            final Profile[] profile = {null};
             ProfileServerService profileServerService = new ProfileServerService();
             profileServerService.retrieveProfile(firebaseUser.getEmail(), new ProfileRepository.OnResultListener<Profile>(){
                 @Override
                 public void onResult(Profile data) {
-                    profile[0] =data;
                     Intent intent = new Intent(LoginActivity.this,MapsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent.putExtra("profile", data));
+                    startActivity(intent);
                 }
             });
         }
@@ -149,7 +147,7 @@ public class LoginActivity extends Activity {
                                     profileDatabaseService.reset();
                                     profileDatabaseService.addProfile(data);
                                     progressDialog.dismiss();
-                                    startActivity(new Intent(LoginActivity.this,MapsActivity.class).putExtra("profile",data));
+                                    startActivity(new Intent(LoginActivity.this,MapsActivity.class));
                                 }
                             });
                         }

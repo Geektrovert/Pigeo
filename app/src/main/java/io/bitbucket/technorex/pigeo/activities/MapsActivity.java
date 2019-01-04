@@ -9,12 +9,10 @@ import android.os.Bundle;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
 
 /**Project Pigeo
@@ -23,18 +21,13 @@ import io.bitbucket.technorex.pigeo.R;
  */
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
+    @SuppressWarnings("FieldCanBeLocal")
     private GoogleMap mMap;
-    private Profile profile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        Log.e("-------------map--->", getIntent().getExtras().get("profile").toString());
-        if (getIntent().getExtras() != null) {
-            profile = (Profile) getIntent().getExtras().get("profile");
-            //Log.e("------------------->", profile.getEmailID());
-        }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -48,7 +41,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bottomNavigationItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MapsActivity.this,ProfileDetailsActivity.class).putExtra("profile",profile));
+                startActivity(new Intent(MapsActivity.this,ProfileDetailsActivity.class));
             }
         });
     }

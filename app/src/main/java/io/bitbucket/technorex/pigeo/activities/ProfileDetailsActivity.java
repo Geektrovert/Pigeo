@@ -30,9 +30,7 @@ public class ProfileDetailsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_details);
-        if(getIntent().getExtras()!=null){
-            profile=(Profile) getIntent().getExtras().get("profile");
-        }
+
         nameLabel=findViewById(R.id.name_label);
         emailLabel=findViewById(R.id.email_label);
         nationalIdLabel=findViewById(R.id.national_id_label);
@@ -53,17 +51,18 @@ public class ProfileDetailsActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
+
+        ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(this);
+        List<Profile> profiles = profileDatabaseService.getProfiles();
+        profile = new Profile();
+        for(Profile data: profiles){
+            profile = data;
+        }
         nameLabel.setText(profile.getUserName());
         emailLabel.setText(profile.getEmailID());
         nationalIdLabel.setText(profile.getNationalID());
         phoneNoLabel.setText(profile.getPhoneNO());
-        ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(this);
-        List<Profile> profiles = profileDatabaseService.getProfiles();
-        Profile profile1 = new Profile();
-        for(Profile profile2: profiles){
-            profile1=profile2;
-        }
-        Log.e("-----DATABASE--->>",profile1.toString());
+        Log.e("-----DATABASE--->>",profile.toString());
     }
 
     @Override
@@ -82,7 +81,7 @@ public class ProfileDetailsActivity extends Activity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.edit_profile)
-            startActivity(new Intent(ProfileDetailsActivity.this, EditProfileActivity.class).putExtra("profile", profile));
+            startActivity(new Intent(ProfileDetailsActivity.this, EditProfileActivity.class));
         return super.onOptionsItemSelected(item);
     }
 }
