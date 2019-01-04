@@ -2,27 +2,36 @@
 <ScrollView
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		xmlns:tools="http://schemas.android.com/tools"
+		style="@style/Base.Theme.MaterialComponents"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		tools:context=".activities.EditProfileActivity"
-		style="@style/Base.Theme.MaterialComponents">
+		android:paddingBottom="@dimen/activity_vertical_margin"
+		android:paddingLeft="@dimen/activity_horizontal_margin"
+		android:paddingRight="@dimen/activity_horizontal_margin"
+		android:paddingTop="@dimen/activity_vertical_margin"
+		tools:context=".activities.LoginActivity"
+		android:background="#004158">
 
 	<LinearLayout android:layout_width="match_parent"
 				  android:layout_height="wrap_content"
 				  android:orientation="vertical"
-				  android:padding="10dp"
+				  android:padding="16dp"
 				  style="@style/Base.Theme.MaterialComponents">
 
 		<TextView style="@style/Base.Theme.MaterialComponents"
 				  android:layout_width="match_parent"
 				  android:layout_height="wrap_content"
 				  android:labelFor="@+id/edit_name"
-				  android:text="@string/name"/>
+				  android:text="@string/name"
+				  android:textColor="#fafafa"/>
+
 		<EditText android:id="@+id/edit_name"
 				  style="@style/Base.Theme.MaterialComponents"
 				  android:layout_width="match_parent"
 				  android:layout_height="wrap_content"
 				  android:inputType="textPersonName"
+				  android:textColor="#fafafa"
+				  android:textColorHint="#fafafa"
 				  android:importantForAutofill="no"
 				  tools:targetApi="o"
 		/>
@@ -31,36 +40,45 @@
 				  android:layout_width="match_parent"
 				  android:layout_height="wrap_content"
 				  android:labelFor="@+id/edit_password"
-				  android:text="@string/new_password"/>
+				  android:text="@string/new_password"
+				  android:textColor="#fafafa"/>
 		<EditText android:id="@+id/edit_password"
 				  style="@style/Base.Theme.MaterialComponents"
 				  android:layout_width="match_parent"
 				  android:layout_height="wrap_content"
 				  android:inputType="textPassword"
+				  android:textColor="#fafafa"
+				  android:textColorHint="#fafafa"
 				  android:importantForAutofill="no"
 				  tools:targetApi="o"/>
 		<TextView style="@style/Base.Theme.MaterialComponents"
 				  android:layout_width="match_parent"
 				  android:layout_height="wrap_content"
 				  android:labelFor="@+id/confirm_edit_password"
+				  android:textColor="#fafafa"
 				  android:text="@string/confirm_new_password"/>
 		<EditText android:id="@+id/confirm_edit_password"
 				  style="@style/Base.Theme.MaterialComponents"
 				  android:layout_width="match_parent"
 				  android:layout_height="match_parent"
 				  android:inputType="textPassword"
+				  android:textColor="#fafafa"
+				  android:textColorHint="#fafafa"
 				  android:importantForAutofill="no"
 				  tools:targetApi="o"/>
 		<TextView style="@style/Base.Theme.MaterialComponents"
 				  android:layout_width="match_parent"
 				  android:layout_height="wrap_content"
 				  android:labelFor="@+id/current_password"
+				  android:textColor="#fafafa"
 				  android:text="@string/current_password"/>
 		<EditText android:id="@+id/current_password"
 				  style="@style/Base.Theme.MaterialComponents"
 				  android:layout_width="match_parent"
 				  android:layout_height="match_parent"
 				  android:inputType="textPassword"
+				  android:textColor="#fafafa"
+				  android:textColorHint="#fafafa"
 				  android:importantForAutofill="no"
 				  tools:targetApi="o"/>
 
@@ -68,6 +86,7 @@
 				  android:layout_width="match_parent"
 				  android:layout_height="wrap_content"
 				  android:labelFor="@+id/edit_phone_no"
+				  android:textColor="#fafafa"
 				  android:text="@string/phone_number"/>
 		<EditText android:id="@+id/edit_phone_no"
 				  style="@style/Base.Theme.MaterialComponents"
@@ -75,6 +94,8 @@
 				  android:layout_height="match_parent"
 				  android:inputType="phone"
 				  android:maxLength="14"
+				  android:textColor="#fafafa"
+				  android:textColorHint="#fafafa"
 				  android:importantForAutofill="no"
 				  tools:targetApi="o"/>
 
@@ -82,6 +103,7 @@
 				  android:layout_width="match_parent"
 				  android:layout_height="wrap_content"
 				  android:labelFor="@+id/edit_national_id"
+				  android:textColor="#fafafa"
 				  android:text="@string/national_id"/>
 		<EditText android:id="@+id/edit_national_id"
 				  style="@style/Base.Theme.MaterialComponents"
@@ -89,6 +111,8 @@
 				  android:layout_height="match_parent"
 				  android:inputType="number"
 				  android:maxLength="10"
+				  android:textColor="#fafafa"
+				  android:textColorHint="#fafafa"
 				  android:importantForAutofill="no"
 				  tools:targetApi="o"/>
 
@@ -98,18 +122,18 @@
 					  android:gravity="center"
 					  style="@style/Base.Theme.MaterialComponents">
 			<Button android:id="@+id/cancel"
-					style="@style/Base.Theme.MaterialComponents"
+					android:background="@drawable/round_button_red"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/cancel"
-					android:textColor="#ae2c2c"
+					android:textColor="#fafafa"
 					android:layout_margin="10dp"/>
 			<Button android:id="@+id/save"
-					style="@style/Base.Theme.MaterialComponents"
+					android:background="@drawable/round_button_green"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:text="@string/save"
-					android:textColor="#229938"
+					android:textColor="#070707"
 					android:layout_margin="10dp"/>
 		</LinearLayout>
 

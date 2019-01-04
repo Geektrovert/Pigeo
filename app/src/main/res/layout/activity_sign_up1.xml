@@ -62,8 +62,8 @@
                 android:layout_marginTop="4dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="#fafafa"
-                android:background="@drawable/round_button"/>
+                android:textColor="#070707"
+                android:background="@drawable/round_button_green"/>
     </LinearLayout>
 
 </ScrollView>
