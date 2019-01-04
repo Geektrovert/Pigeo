@@ -85,10 +85,6 @@ public class LoginActivity extends Activity {
                 @Override
                 public void onResult(Profile data) {
                     profile[0] =data;
-//                    ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(LoginActivity.this);
-//                    profileDatabaseService.reset();
-//                    profileDatabaseService.updateProfile(data);
-
                     Intent intent = new Intent(LoginActivity.this,MapsActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent.putExtra("profile", data));
@@ -149,9 +145,9 @@ public class LoginActivity extends Activity {
                                 public void onResult(Profile data) {
                                     profile[0] =data;
                                     Log.e("***---ppp--->>>", profile[0].toString());
-//                                    ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(LoginActivity.this);
-//                                    profileDatabaseService.reset();
-//                                    profileDatabaseService.updateProfile(data);
+                                    ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(LoginActivity.this);
+                                    profileDatabaseService.reset();
+                                    profileDatabaseService.addProfile(data);
                                     progressDialog.dismiss();
                                     startActivity(new Intent(LoginActivity.this,MapsActivity.class).putExtra("profile",data));
                                 }

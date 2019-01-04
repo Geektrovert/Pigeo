@@ -14,6 +14,9 @@ import com.google.firebase.auth.FirebaseUser;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.DatabaseProfileRepository;
+import io.bitbucket.technorex.pigeo.Service.ProfileDatabaseService;
+
+import java.util.List;
 
 public class ProfileDetailsActivity extends Activity {
     private TextView nameLabel;
@@ -54,6 +57,13 @@ public class ProfileDetailsActivity extends Activity {
         emailLabel.setText(profile.getEmailID());
         nationalIdLabel.setText(profile.getNationalID());
         phoneNoLabel.setText(profile.getPhoneNO());
+        ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(this);
+        List<Profile> profiles = profileDatabaseService.getProfiles();
+        Profile profile1 = new Profile();
+        for(Profile profile2: profiles){
+            profile1=profile2;
+        }
+        Log.e("-----DATABASE--->>",profile1.toString());
     }
 
     @Override

@@ -84,10 +84,9 @@ public class EditProfileActivity extends Activity {
         if(validateInput(new EditText[]{name, phoneNO, nationalID, currentPassword})) {
             updateInfo();
 
+            Log.e("-----VALIDATION--->>>", Integer.toString(validatePassword()));
             if (validatePassword() == 0) {
                 updatePassword(currentPassword.getText().toString());
-                Toast.makeText(this, "Changes saved successfully!", Toast.LENGTH_LONG).show();
-                finish();
             }
             else if (validatePassword() == 3)
                 Toast.makeText(this, "Passwords don't match", Toast.LENGTH_LONG).show();
@@ -109,6 +108,7 @@ public class EditProfileActivity extends Activity {
         profile.setPhoneNO(phoneNO.getText().toString());
         profile.setUserName(name.getText().toString());
         profileServerService.updateProfile(profile);
+
     }
 
     private void updatePassword(String currentPassword) {
@@ -129,6 +129,8 @@ public class EditProfileActivity extends Activity {
                                             ProfileServerService profileServerService = new ProfileServerService();
                                             profileServerService.updateProfile(profile);
                                             Log.e("***-----SUCCESS--->>>", "Password updated");
+                                            Toast.makeText(EditProfileActivity.this, "Changes saved successfully!", Toast.LENGTH_LONG).show();
+                                            finish();
                                         }
                                         else
                                             Log.e("***-----ERROR--->>>", "Not updated");

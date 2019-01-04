@@ -23,9 +23,10 @@ public class DatabaseProfileRepository implements ProfileRepository {
 
         try (SQLiteDatabase db = new DbHelper(context).getReadableDatabase()){
             Cursor cursor = db
-                    .query("PROFILE",null,"_id=?",new String[]{"1"},null,null,null);
+                    .query("PROFILE",null,null,null,null,null,null);
             while (cursor.moveToNext()){
                 profile=new Profile(
+                        cursor.getString(cursor.getColumnIndexOrThrow("_id")),
                         cursor.getString(cursor.getColumnIndexOrThrow("user_name")),
                         cursor.getString(cursor.getColumnIndexOrThrow("email_id")),
                         cursor.getString(cursor.getColumnIndexOrThrow("password_hash")),
@@ -38,20 +39,29 @@ public class DatabaseProfileRepository implements ProfileRepository {
         return profile;
     }
 
+    public void addProfile(Profile profile) {
+        ContentValues contentValues = getContentValues(profile);
+
+        try (SQLiteDatabase db = new DbHelper(context).getWritableDatabase()) {
+            db.insertOrThrow("PROFILE", null, contentValues);
+        }
+    }
+
     @Override
     public List<Profile> getProfiles() {
         List<Profile> profiles = new ArrayList<>();
         try (SQLiteDatabase db = new DbHelper(context).getReadableDatabase()){
             Cursor cursor = db
-                    .query("PROFILE",null,"_id=?",new String[]{"1"},null,null,null);
+                    .query("PROFILE",null,null,null,null,null,null);
             while (cursor.moveToNext()){
                 profiles.add(
                         new Profile(
-                            cursor.getString(cursor.getColumnIndexOrThrow("user_name")),
-                            cursor.getString(cursor.getColumnIndexOrThrow("email_id")),
-                            cursor.getString(cursor.getColumnIndexOrThrow("password_hash")),
-                            cursor.getString(cursor.getColumnIndexOrThrow("national_id")),
-                            cursor.getString(cursor.getColumnIndexOrThrow("phone_no"))
+                                cursor.getString(cursor.getColumnIndexOrThrow("_id")),
+                                cursor.getString(cursor.getColumnIndexOrThrow("user_name")),
+                                cursor.getString(cursor.getColumnIndexOrThrow("email_id")),
+                                cursor.getString(cursor.getColumnIndexOrThrow("password_hash")),
+                                cursor.getString(cursor.getColumnIndexOrThrow("national_id")),
+                                cursor.getString(cursor.getColumnIndexOrThrow("phone_no"))
                         )
                 );
             }
@@ -63,7 +73,7 @@ public class DatabaseProfileRepository implements ProfileRepository {
     @Override
     public void updateProfile(Profile profile) {
         try (SQLiteDatabase db = new DbHelper(context).getWritableDatabase()){
-            db.update("PROFILE",getContentValues(profile),"id=?",new String[]{"1"});
+            db.update("PROFILE",getContentValues(profile),"_id=?",new String[]{profile.getId()});
         }
     }
 
@@ -75,24 +85,17 @@ public class DatabaseProfileRepository implements ProfileRepository {
     @Override
     public void reset() {
 
-        String initializeProfile
-                = "INSERT INTO PROFILE VALUES (" +
-                "       '1'," +
-                "       '-1-1'," +
-                "       '-1'," +
-                "       '-1'," +
-                "       '-1'," +
-                "       '-1'" +
-                "   )";
+        String clearProfile
+                = "DELETE FROM PROFILE";
 
         try (SQLiteDatabase db = new DbHelper(context).getWritableDatabase()){
-            db.execSQL(initializeProfile);
+            db.execSQL(clearProfile);
         }
     }
 
     private ContentValues getContentValues(Profile profile){
         ContentValues contentValues = new ContentValues();
-        contentValues.put("_id", "1");
+        contentValues.put("_id", profile.getId());
         contentValues.put("user_name",profile.getUserName());
         contentValues.put("email_id",profile.getEmailID());
         contentValues.put("password_hash",profile.getPasswordHash());

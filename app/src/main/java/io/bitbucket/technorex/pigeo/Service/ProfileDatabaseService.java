@@ -8,7 +8,7 @@ import io.bitbucket.technorex.pigeo.Repository.ProfileRepository;
 import java.util.List;
 
 public class ProfileDatabaseService {
-    private ProfileRepository profileRepository;
+    private DatabaseProfileRepository profileRepository;
     public ProfileDatabaseService(Context context){
         profileRepository=new DatabaseProfileRepository(context);
     }
@@ -20,4 +20,5 @@ public class ProfileDatabaseService {
         profileRepository.updateProfile(profile);
     }
     public void reset(){profileRepository.reset();}
+    public void addProfile(Profile profile){profileRepository.addProfile(profile);}
 }
