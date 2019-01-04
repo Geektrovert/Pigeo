@@ -9,12 +9,14 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".activities.SignUpActivity1"
-        android:background="#004158">
+        android:background="#004158"
+		style="@style/Base.Theme.MaterialComponents">
     <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:ignore="UselessParent">
+            tools:ignore="UselessParent"
+			style="@style/Base.Theme.MaterialComponents">
         <ImageView
                 android:layout_width="200dip"
                 android:layout_height="200dip"
@@ -24,6 +26,7 @@
                 android:contentDescription="@string/logo"/>
         <EditText
                 android:id="@+id/signUpEmail"
+				style="@style/Base.Theme.MaterialComponents"
                 android:hint="@string/email"
                 android:inputType="textEmailAddress"
                 android:layout_width="match_parent"
@@ -33,6 +36,7 @@
                 tools:ignore="Autofill"/>
         <EditText
                 android:id="@+id/signUpPassword"
+				style="@style/Base.Theme.MaterialComponents"
                 android:inputType="textPassword"
                 android:hint="@string/password"
                 android:layout_width="match_parent"
@@ -42,6 +46,7 @@
                 tools:ignore="Autofill"/>
         <EditText
                 android:id="@+id/confirmPassword"
+				style="@style/Base.Theme.MaterialComponents"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/confirm_password"
@@ -51,6 +56,7 @@
                 tools:ignore="Autofill"/>
         <Button
                 android:id="@+id/next"
+				style="@style/Base.Theme.MaterialComponents"
                 android:text="@string/next"
                 android:layout_gravity="center"
                 android:layout_marginTop="4dp"
