@@ -127,4 +127,8 @@ public class ServerProfileRepository implements ProfileRepository {
                     }
                 });
     }
+
+    public void addProfile(Profile profile) {
+        saveProfile(profile);
+    }
 }

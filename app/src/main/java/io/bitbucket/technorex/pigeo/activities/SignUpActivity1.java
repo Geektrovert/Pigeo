@@ -19,7 +19,7 @@ public class SignUpActivity1 extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up1);
         bindWidgets();
-        bindActivities();
+        bindListeners();
     }
 
     private void bindWidgets() {
@@ -29,7 +29,7 @@ public class SignUpActivity1 extends Activity {
         nextPage = findViewById(R.id.next);
     }
 
-    private void bindActivities() {
+    private void bindListeners() {
         nextPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +54,7 @@ public class SignUpActivity1 extends Activity {
         for(EditText editText : editTexts) {
             flag &= !editText.getText().toString().isEmpty();
             if(editText.getText().toString().isEmpty()){
-                showError(editText,R.string.field_cant_be_empty);
+                setError(editText,R.string.field_cant_be_empty);
             }
         }
         return flag;

@@ -26,4 +26,5 @@ public class ProfileServerService {
             profileRepository.userCount(userCount,resultListener);
         }
         public void incrementUser(UserCount userCount){profileRepository.incrementUser(userCount);}
+        public void addProfile(Profile profile) {profileRepository.addProfile(profile);}
 }

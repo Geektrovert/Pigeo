@@ -12,7 +12,7 @@ public interface ProfileRepository {
 
     void updateProfile(Profile profile);
 
-    void retrieveProfile(String email,OnResultListener<Profile> resultListener);
+    void retrieveProfile(String email, OnResultListener<Profile> resultListener);
 
     void reset();
 
