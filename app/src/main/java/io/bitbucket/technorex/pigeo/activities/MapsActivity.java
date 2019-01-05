@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.internal.BottomNavigationItemView;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
@@ -37,6 +38,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     private void bindWidgets() {
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
+        bottomNavigationView.setSelectedItemId(R.id.home);
         BottomNavigationItemView bottomNavigationItemView = findViewById(R.id.user_icon);
         bottomNavigationItemView.setOnClickListener(new View.OnClickListener() {
             @Override

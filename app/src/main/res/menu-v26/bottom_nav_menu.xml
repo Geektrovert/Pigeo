@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/settings_icon"
-          android:title="@string/settings"
-          android:icon="@drawable/round_person_24"
-          android:iconTint="@color/colorPrimaryDark"
-    />
-    <item android:id="@+id/sos"
-          android:title="@string/sos"
-          android:icon="@android:drawable/ic_dialog_alert"
-    />
-    <item android:id="@+id/user_icon"
-          android:title="@string/user"
-          android:icon="@android:drawable/presence_online"
-    />
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/user_icon"
+		  android:title="@string/user"
+		  android:icon="@drawable/round_person_24"
+	/>
+	<item android:id="@+id/home"
+		  android:title="@string/home"
+		  android:icon="@android:drawable/ic_menu_compass"
+	/>
+	<item android:id="@+id/sos"
+		  android:title="@string/sos"
+		  android:icon="@android:drawable/ic_menu_send"
+	/>
 
 </menu>
