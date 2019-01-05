@@ -97,6 +97,7 @@ public class Profile implements Serializable {
     public String toString() {
         return "Profile{" +
                 "userName='" + userName + '\'' +
+                ", id='" + id + '\'' +
                 ", emailID='" + emailID + '\'' +
                 ", passwordHash='" + passwordHash + '\'' +
                 ", nationalID='" + nationalID + '\'' +
