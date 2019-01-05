@@ -36,4 +36,6 @@
     <string name="save">Save</string>
 	<string name="current_password">Current Password</string>
 	<string name="home">Home</string>
+    <string name="field_cant_be_empty">Field can\'t be empty</string>
+	<string name="passwords_dont_match">Passwords don\'t match</string>
 </resources>

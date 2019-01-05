@@ -162,18 +162,34 @@ public class EditProfileActivity extends Activity {
 
     private boolean validateInput(EditText[] editTexts) {
         boolean flag = true;
-        for(EditText editText : editTexts)
+        for(EditText editText : editTexts) {
             flag &= !editText.getText().toString().isEmpty();
+            if(editText.getText().toString().isEmpty()){
+                showError(editText,R.string.field_cant_be_empty);
+            }
+        }
         return flag;
     }
 
     private int validatePassword() {
         String pass = newPassword.getText().toString();
         String conPass = confirmNewPassword.getText().toString();
-        if(pass.isEmpty() && conPass.isEmpty()) return 1;
-        if(pass.isEmpty() || conPass.isEmpty()) return 2;
-        if(!pass.equals(conPass)) return 3;
+        if(pass.isEmpty() && conPass.isEmpty())return 1;
+        if(pass.isEmpty() || conPass.isEmpty()){
+            if(pass.isEmpty()) showError(newPassword,R.string.field_cant_be_empty);
+            if(conPass.isEmpty()) showError(confirmNewPassword,R.string.field_cant_be_empty);
+            return 2;
+        }
+        if(!pass.equals(conPass)){
+            showError(newPassword,R.string.passwords_dont_match);
+            return 3;
+        }
         return 0;
+    }
+
+
+    private void showError(EditText field, int messageRes) {
+        field.setError(getString(messageRes));
     }
 
     private boolean validateCurrentPassword(EditText editText) {
