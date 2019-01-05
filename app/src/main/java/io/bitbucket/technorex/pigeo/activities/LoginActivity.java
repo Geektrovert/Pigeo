@@ -41,14 +41,15 @@ public class LoginActivity extends Activity {
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
 
+        //checking for a previous logged in session
+        checkIfSignedIn();
+
         //initializing variables
         bindVariables();
 
         /*Bind listeners to layout views*/
         bindListeners();
 
-        //checking for a previous logged in session
-        checkIfSignedIn();
     }
 
     @Override
