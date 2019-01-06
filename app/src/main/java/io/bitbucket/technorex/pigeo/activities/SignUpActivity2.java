@@ -54,21 +54,24 @@ public class SignUpActivity2 extends Activity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                firebaseAuth.createUserWithEmailAndPassword(strings[0],strings[1]).addOnCompleteListener(SignUpActivity2.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            progressDialog.setTitle("Completing registration and logging in...");
-                            progressDialog.show();
-                            logIn();
-                        }
-                        else{
-                            Toast.makeText(SignUpActivity2.this,"Registration Failed!",Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
+                createUserAndLogin();
+            }
+        });
+    }
+    
+    private void createUserAndLogin() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.createUserWithEmailAndPassword(strings[0],strings[1]).addOnCompleteListener(SignUpActivity2.this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if(task.isSuccessful()){
+                    progressDialog.setTitle("Completing registration and logging in...");
+                    progressDialog.show();
+                    logIn();
+                }
+                else{
+                    Toast.makeText(SignUpActivity2.this,"Registration Failed!",Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
