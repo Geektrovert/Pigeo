@@ -16,7 +16,7 @@ public class StartActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        checkPermissions();
+        //checkPermissions();
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if(firebaseUser != null)
             startActivity(new Intent(StartActivity.this, MapsActivity.class));
