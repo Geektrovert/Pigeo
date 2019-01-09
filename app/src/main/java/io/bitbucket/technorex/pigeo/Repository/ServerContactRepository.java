@@ -59,7 +59,7 @@ public class ServerContactRepository implements ContactRepository{
     @Override
     public void deleteContact(final Contact contact) {
         db.collection(DB_COLLECTION_NAME)
-                .document(Integer.toString(contact.getId()))
+                .document(contact.getId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -87,7 +87,7 @@ public class ServerContactRepository implements ContactRepository{
 
     private void saveContact(final Contact contact) {
         db.collection(DB_COLLECTION_NAME)
-                .document(Integer.toString(contact.getId()))
+                .document(contact.getId())
                 .set(contact)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

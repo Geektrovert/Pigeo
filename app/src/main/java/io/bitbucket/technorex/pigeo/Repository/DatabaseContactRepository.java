@@ -28,7 +28,7 @@ public class DatabaseContactRepository implements ContactRepository{
                         new Contact(
                                 cursor.getString(cursor.getColumnIndexOrThrow("contact_name")),
                                 cursor.getString(cursor.getColumnIndexOrThrow("contact_number")),
-                                cursor.getInt(cursor.getColumnIndexOrThrow("_id"))
+                                cursor.getString(cursor.getColumnIndexOrThrow("_id"))
                         )
                 );
             }
@@ -47,7 +47,7 @@ public class DatabaseContactRepository implements ContactRepository{
     @Override
     public void deleteContact(Contact contact) {
         try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()){
-            db.delete("CONTACTS","_id=?",new String[]{Integer.toString(contact.getId())});
+            db.delete("CONTACTS","_id=?",new String[]{contact.getId()});
         }
     }
 
@@ -55,7 +55,7 @@ public class DatabaseContactRepository implements ContactRepository{
     public void updateContact(Contact contact) {
         ContentValues contentValues = getContentValues(contact);
         try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()){
-            db.update("CONTACTS",contentValues,"_id=?",new String[]{Integer.toString(contact.getId())});
+            db.update("CONTACTS",contentValues,"_id=?",new String[]{contact.getId()});
         }
     }
 
@@ -69,7 +69,7 @@ public class DatabaseContactRepository implements ContactRepository{
                 contact = new Contact(
                         cursor.getString(cursor.getColumnIndexOrThrow("contact_name")),
                         cursor.getString(cursor.getColumnIndexOrThrow("contact_number")),
-                        cursor.getInt(cursor.getColumnIndexOrThrow("_id"))
+                        cursor.getString(cursor.getColumnIndexOrThrow("_id"))
                 );
             }
             cursor.close();

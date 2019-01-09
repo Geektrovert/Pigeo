@@ -8,9 +8,9 @@ import java.util.Objects;
 public class Contact implements Serializable {
     private String contactName;
     private String contactNumber;
-    private int id;
+    private String id;
 
-    public Contact(String contactName, String contactNumber, int id) {
+    public Contact(String contactName, String contactNumber, String id) {
         this.contactName = contactName;
         this.contactNumber = contactNumber;
         this.id = id;
@@ -37,11 +37,11 @@ public class Contact implements Serializable {
         this.contactNumber = contactNumber;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -50,15 +50,15 @@ public class Contact implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Contact)) return false;
         Contact contact = (Contact) o;
-        return id == contact.id &&
-                Objects.equals(contactName, contact.contactName) &&
-                Objects.equals(contactNumber, contact.contactNumber);
+        return Objects.equals(getContactName(), contact.getContactName()) &&
+                Objects.equals(getContactNumber(), contact.getContactNumber()) &&
+                Objects.equals(getId(), contact.getId());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(contactName, contactNumber, id);
+        return Objects.hash(getContactName(), getContactNumber(), getId());
     }
 
     @NonNull

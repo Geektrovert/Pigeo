@@ -1,7 +1,10 @@
 package io.bitbucket.technorex.pigeo.activities;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -48,13 +51,35 @@ public class AddContactActivity extends Activity {
     }
 
     private void retrieveCards() {
-        ContactDatabaseService contactDatabaseService = new ContactDatabaseService(this);
-        contacts = contactDatabaseService.listContact();
+        contacts = getContacts();
 
         AddContactAdapter addContactAdapter = (AddContactActivity.AddContactAdapter) contactsRecyclerView.getAdapter();
         assert addContactAdapter != null;
         addContactAdapter.setContacts(contacts);
         addContactAdapter.notifyDataSetChanged();
+    }
+
+    private List<Contact> getContacts() {
+        List<Contact> contacts = new ArrayList<>();
+
+        ContentResolver contentResolver = getContentResolver();
+        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,null,null,null,null);
+        assert cursor != null;
+
+        while (cursor.moveToNext()){
+            String id = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts._ID));
+            String name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+            Cursor phoneCursor = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID+" = ?",new String[]{ id },null);
+
+            assert phoneCursor != null;
+            while (phoneCursor.moveToNext()){
+                String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                contacts.add(new Contact(name,phoneNumber,id));
+            }
+            phoneCursor.close();
+        }
+        cursor.close();
+        return contacts;
     }
 
     private void prepareListView() {
