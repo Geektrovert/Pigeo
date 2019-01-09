@@ -44,12 +44,6 @@ public class DbHelper extends SQLiteOpenHelper {
         this.sqLiteDatabase.execSQL(createTableProfile);
     }
 
-    private void clearProfile() {
-        String clearProfile
-                = "DELETE FROM PROFILE";
-        this.sqLiteDatabase.execSQL(clearProfile);
-    }
-
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         //Nothing to do here
