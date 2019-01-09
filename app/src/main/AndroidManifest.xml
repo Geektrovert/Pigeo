@@ -44,6 +44,7 @@
 		<meta-data
 				android:name="com.google.android.geo.API_KEY"
 				android:value="@string/google_maps_key"/>
+
 		<activity
 				android:name=".activities.MapsActivity"
 				android:label="@string/title_activity_maps"
@@ -57,6 +58,10 @@
 				android:theme="@style/AppTheme.NoActionBar"/>
 		<activity android:name=".activities.ProfileDetailsActivity"/>
 		<activity android:name=".activities.EditProfileActivity"/>
+		<activity android:name=".activities.ContactListActivity">
+		</activity>
+		<activity android:name=".activities.EditContactActivity">
+		</activity>
 	</application>
 
 </manifest>
