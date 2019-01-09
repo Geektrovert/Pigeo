@@ -38,4 +38,6 @@
 	<string name="home">Home</string>
 	<string name="field_cant_be_empty">Field can\'t be empty</string>
 	<string name="passwords_dont_match">Passwords don\'t match</string>
+	<string name="add_contacts">Add Contacts</string>
+	<string name="back">back</string>
 </resources>

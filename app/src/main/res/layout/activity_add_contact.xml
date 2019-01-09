@@ -7,9 +7,9 @@
 		android:layout_height="match_parent"
 		style="@style/Base.Theme.MaterialComponents"
 		android:background="#004158"
-		tools:context=".activities.ContactListActivity">
+		tools:context=".activities.AddContactActivity">
 	<android.support.v7.widget.RecyclerView
-			android:id="@+id/contact_list"
+			android:id="@+id/add_contact_list"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"/>
 
