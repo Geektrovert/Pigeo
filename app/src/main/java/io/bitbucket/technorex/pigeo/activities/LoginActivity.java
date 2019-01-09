@@ -17,7 +17,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.ProfileRepository;
@@ -40,9 +39,6 @@ public class LoginActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_login);
         super.onCreate(savedInstanceState);
-
-        //checking for a previous logged in session
-        checkIfSignedIn();
 
         //initializing variables
         bindVariables();
@@ -73,23 +69,6 @@ public class LoginActivity extends Activity {
                 })
                 .setNegativeButton(R.string.no,null)
                 .show();
-    }
-
-    private void checkIfSignedIn() {
-        /*Email Account*/
-        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-        //if there is a previous session redirect to map activity
-        if(firebaseUser!=null){
-            ProfileServerService profileServerService = new ProfileServerService();
-            profileServerService.retrieveProfile(firebaseUser.getEmail(), new ProfileRepository.OnResultListener<Profile>(){
-                @Override
-                public void onResult(Profile data) {
-                    Intent intent = new Intent(LoginActivity.this,MapsActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                    startActivity(intent);
-                }
-            });
-        }
     }
 
     private void bindListeners() {

@@ -30,7 +30,7 @@ public class ProfileDetailsActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_details);
-        setTitle("Edit Profile");
+        setTitle("Profile");
         nameLabel=findViewById(R.id.name_label);
         emailLabel=findViewById(R.id.email_label);
         nationalIdLabel=findViewById(R.id.national_id_label);
