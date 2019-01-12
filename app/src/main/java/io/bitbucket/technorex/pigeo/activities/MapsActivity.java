@@ -16,7 +16,6 @@ import android.widget.Button;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 import io.bitbucket.technorex.pigeo.Domain.UserCount;
 import io.bitbucket.technorex.pigeo.R;
@@ -38,7 +37,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         activeUserThread = new ActiveUserThread();
-        activeUserThread.start();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -46,6 +44,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
         bindWidgets();
         bindListeners();
+        activeUserThread.start();
     }
 
     private void bindWidgets() {
@@ -124,6 +123,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         ActiveUserThread(){
             databaseReference= FirebaseDatabase.getInstance().getReference("/Online");
+            updateOnlineUserCount();
         }
 
         @Override
@@ -135,6 +135,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         UserCount userCount = ds.getValue(UserCount.class);
                         assert userCount != null;
                         onlineUsers.setText(userCount.getNumbers());
+                        break;
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+
+        private void updateOnlineUserCount() {
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        UserCount onlineUserCount = ds.getValue(UserCount.class);
+                        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("/Online/Users/");
+                        assert onlineUserCount != null;
+                        databaseReference1.child("onlineUser").setValue(onlineUserCount.getNumber() + 1);
+                        break;
                     }
                 }
 
@@ -146,4 +167,3 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
     }
 }
-
