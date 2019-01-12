@@ -38,6 +38,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         activeUserThread = new ActiveUserThread();
+        try {
+            activeUserThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -170,5 +175,31 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
             });
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                boolean check=true;
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    UserCount onlineUserCount = ds.getValue(UserCount.class);
+                    DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("/Online/Users/");
+                    assert onlineUserCount != null;
+                    if (check) {
+                        check = false;
+                        databaseReference1.child("number").setValue(onlineUserCount.getNumber() - 1);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 }
