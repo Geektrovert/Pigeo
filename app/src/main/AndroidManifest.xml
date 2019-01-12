@@ -59,7 +59,9 @@
 				android:name=".activities.SignUpActivity2"
 				android:theme="@style/AppTheme.NoActionBar"/>
 		<activity android:name=".activities.ProfileDetailsActivity"/>
-		<activity android:name=".activities.EditProfileActivity"/>
+		<activity
+				android:name=".activities.EditProfileActivity"
+				android:theme="@style/AppTheme.EditProfile"/>
 		<activity android:name=".activities.ContactListActivity">
 		</activity>
 		<activity android:name=".activities.EditContactActivity">
