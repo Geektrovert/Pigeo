@@ -197,4 +197,19 @@ public class EditProfileActivity extends Activity {
         Log.e("---PASS----->>>", Integer.toString(editText.getText().toString().hashCode()));
         return Integer.toString(editText.getText().toString().hashCode()).equals(profile.getPasswordHash());
     }
+
+    @Override
+    public void onBackPressed() {
+        new AlertDialog.Builder(EditProfileActivity.this)
+                .setTitle("Confirm exit")
+                .setMessage("Discard unsaved changes?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", null)
+                .show();
+    }
 }

@@ -53,8 +53,6 @@ public class ProfileDetailsActivity extends Activity {
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 if(firebaseUser != null) {
                     updateOnlineUserCount();
-                    profile.logOut();
-                    startActivity(new Intent(ProfileDetailsActivity.this, LoginActivity.class));
                 }
             }
         });
@@ -73,6 +71,8 @@ public class ProfileDetailsActivity extends Activity {
                     if (check) {
                         check = false;
                         databaseReference1.child("number").setValue(onlineUserCount.getNumber() - 1);
+                        profile.logOut();
+                        startActivity(new Intent(ProfileDetailsActivity.this, LoginActivity.class));
                     }
                 }
             }
