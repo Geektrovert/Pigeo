@@ -3,6 +3,7 @@ package io.bitbucket.technorex.pigeo.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -11,7 +12,9 @@ import android.widget.Button;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.*;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
+import io.bitbucket.technorex.pigeo.Domain.UserCount;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.DatabaseProfileRepository;
 import io.bitbucket.technorex.pigeo.Service.ProfileDatabaseService;
@@ -31,19 +34,52 @@ public class ProfileDetailsActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_details);
         setTitle("Profile");
+        bindWidgets();
+        bindListeners();
+    }
+
+    private void bindWidgets() {
         nameLabel=findViewById(R.id.name_label);
         emailLabel=findViewById(R.id.email_label);
         nationalIdLabel=findViewById(R.id.national_id_label);
         phoneNoLabel=findViewById(R.id.phone_number_label);
         logOutButton = findViewById(R.id.log_out_button);
+    }
+
+    private void bindListeners() {
         logOutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 if(firebaseUser != null) {
+                    updateOnlineUserCount();
                     profile.logOut();
                     startActivity(new Intent(ProfileDetailsActivity.this, LoginActivity.class));
                 }
+            }
+        });
+    }
+
+    private void updateOnlineUserCount() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("/Online/");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            private boolean check=true;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+                    UserCount onlineUserCount = ds.getValue(UserCount.class);
+                    DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("/Online/Users/");
+                    assert onlineUserCount != null;
+                    if (check) {
+                        check = false;
+                        databaseReference1.child("number").setValue(onlineUserCount.getNumber() - 1);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
