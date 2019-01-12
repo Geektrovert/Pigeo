@@ -1,6 +1,7 @@
 package io.bitbucket.technorex.pigeo.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -78,7 +79,7 @@ public class RetrievePassword extends Activity {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if(task.isSuccessful()){
-
+                            startActivity(new Intent(RetrievePassword.this,PasswordRetrievalEmailSuccessful.class));
                         }
                         else{
                             Toast.makeText(RetrievePassword.this,"No internet Connection",Toast.LENGTH_SHORT)
