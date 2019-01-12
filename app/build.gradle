@@ -58,7 +58,7 @@ dependencies {
         exclude module: 'support-v4'
     }
 
-    implementation('com.google.firebase:firebase-database:16.0.1'){
+    implementation('com.google.firebase:firebase-database:16.0.1') {
         exclude group: 'com.android.support'
         exclude module: 'appcompat-v7'
         exclude module: 'support-v4'

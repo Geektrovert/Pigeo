@@ -21,7 +21,10 @@
 			android:supportsRtl="true"
 			android:theme="@style/AppTheme"
 			tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-		<uses-library android:name="org.apache.http.legacy" android:required="false"/>
+		<uses-library
+				android:name="org.apache.http.legacy"
+				android:required="false"/>
+
 		<activity
 				android:name=".activities.StartActivity"
 				android:theme="@style/SplashTheme">
@@ -67,6 +70,10 @@
 		<activity android:name=".activities.EditContactActivity">
 		</activity>
 		<activity android:name=".activities.AddContactActivity">
+		</activity>
+		<activity android:name=".activities.RetrievePassword">
+		</activity>
+		<activity android:name=".activities.PasswordRetrievalEmailSuccessful">
 		</activity>
 	</application>
 

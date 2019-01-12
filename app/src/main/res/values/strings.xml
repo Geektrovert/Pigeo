@@ -40,4 +40,8 @@
 	<string name="passwords_dont_match">Passwords don\'t match</string>
 	<string name="add_contacts">Add Contacts</string>
 	<string name="back">back</string>
+	<string name="enter_your_account_email">Enter your account email</string>
+	<string name="send_recovery_email">Send Recovery Email</string>
+	<string name="recovery_success">A recovery mail has been sent to your email.</string>
+	<string name="back_to_homepage">Back to homepage</string>
 </resources>
