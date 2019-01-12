@@ -39,6 +39,7 @@
 				android:drawableStart="@drawable/bell"
 				android:paddingStart="20dp"
 				android:paddingEnd="20dp"
+				android:textColor="#070707"
 				android:background="@drawable/round_button_white"/>
 		<Button
 				android:id="@+id/active_users"
@@ -49,6 +50,7 @@
 				android:drawableStart="@drawable/account_multiple"
 				android:paddingStart="20dp"
 				android:paddingEnd="20dp"
+				android:textColor="#070707"
 				android:background="@drawable/round_button_white"/>
 		<Button
 				android:id="@+id/contacts"
@@ -59,6 +61,7 @@
 				android:drawableStart="@drawable/contacts"
 				android:paddingStart="20dp"
 				android:paddingEnd="20dp"
+				android:textColor="#070707"
 				android:background="@drawable/round_button_white"/>
 	</LinearLayout>
 

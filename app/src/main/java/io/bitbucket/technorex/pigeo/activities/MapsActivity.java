@@ -25,7 +25,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @SuppressWarnings("FieldCanBeLocal")
     private GoogleMap mMap;
-    private Button contacts;
+    private Button contacts,onlineUsers;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
         contacts = findViewById(R.id.contacts);
-
+        onlineUsers = findViewById(R.id.active_users);
     }
 
     private void bindListeners() {
@@ -61,6 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(new Intent(MapsActivity.this,ContactListActivity.class));
             }
         });
+        onlineUsers.setClickable(false);
     }
 
     @Override
