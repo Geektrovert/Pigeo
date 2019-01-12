@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.ActivityCompat;
@@ -15,6 +16,9 @@ import android.widget.Button;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.*;
+import io.bitbucket.technorex.pigeo.Domain.UserCount;
 import io.bitbucket.technorex.pigeo.R;
 
 /**Project Pigeo
@@ -26,11 +30,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @SuppressWarnings("FieldCanBeLocal")
     private GoogleMap mMap;
     private Button contacts,onlineUsers;
+    @SuppressWarnings("FieldCanBeLocal")
+    private ActiveUserThread activeUserThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
+        activeUserThread = new ActiveUserThread();
+        activeUserThread.start();
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -107,6 +115,35 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 /*        LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
+    }
+
+    private class ActiveUserThread extends Thread{
+
+        private DatabaseReference databaseReference;
+        private
+
+        ActiveUserThread(){
+            databaseReference= FirebaseDatabase.getInstance().getReference("/Online");
+        }
+
+        @Override
+        public void run() {
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        UserCount userCount = ds.getValue(UserCount.class);
+                        assert userCount != null;
+                        onlineUsers.setText(userCount.getNumbers());
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
     }
 }
 

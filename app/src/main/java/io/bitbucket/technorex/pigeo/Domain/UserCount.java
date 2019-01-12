@@ -15,6 +15,8 @@ public class UserCount {
         return number;
     }
 
+    public String getNumbers(){return Integer.toString(number);}
+
     public void setNumber(int number) {
         this.number = number;
     }
