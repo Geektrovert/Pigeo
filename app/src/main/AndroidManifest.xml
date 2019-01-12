@@ -71,11 +71,10 @@
 		</activity>
 		<activity android:name=".activities.AddContactActivity">
 		</activity>
-		<activity android:name=".activities.RetrievePassword"
-				  android:theme="@style/AppTheme.EditProfile">
+		<activity android:name=".activities.RetrievePassword">
 		</activity>
 		<activity android:name=".activities.PasswordRetrievalEmailSuccessful"
-				  android:theme="@style/AppTheme.EditProfile">
+			      android:theme="@style/AppTheme.EditProfile">
 		</activity>
 	</application>
 
