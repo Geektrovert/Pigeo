@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -119,7 +120,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private class ActiveUserThread extends Thread{
 
         private DatabaseReference databaseReference;
-        private
+        private boolean check=true;
 
         ActiveUserThread(){
             databaseReference= FirebaseDatabase.getInstance().getReference("/Online");
@@ -147,6 +148,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }
 
         private void updateOnlineUserCount() {
+
             databaseReference.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -154,7 +156,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         UserCount onlineUserCount = ds.getValue(UserCount.class);
                         DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("/Online/Users/");
                         assert onlineUserCount != null;
-                        databaseReference1.child("onlineUser").setValue(onlineUserCount.getNumber() + 1);
+                        if(check) {
+                            check = false;
+                            databaseReference1.child("number").setValue(onlineUserCount.getNumber() + 1);
+                        }
                         break;
                     }
                 }
