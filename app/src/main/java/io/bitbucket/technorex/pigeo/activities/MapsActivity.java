@@ -182,9 +182,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onDestroy();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("/Online/");
         databaseReference.addValueEventListener(new ValueEventListener() {
+            private boolean check=true;
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                boolean check=true;
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     UserCount onlineUserCount = ds.getValue(UserCount.class);
                     DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("/Online/Users/");
