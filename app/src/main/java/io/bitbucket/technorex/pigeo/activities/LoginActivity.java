@@ -166,7 +166,7 @@ public class LoginActivity extends Activity {
         email=findViewById(R.id.logInEmail);
         password=findViewById(R.id.logInPassword);
         emailSignInButton=findViewById(R.id.email_sign_in);
-        forgotPassword=findViewById(R.id.forgotPassword);
+        forgotPassword=findViewById(R.id.recover_password);
         signUp=findViewById(R.id.signUp);
         progressDialog=new ProgressDialog(this);
         firebaseAuth=FirebaseAuth.getInstance();
