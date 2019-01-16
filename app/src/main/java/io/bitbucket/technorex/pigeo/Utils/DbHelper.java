@@ -38,10 +38,18 @@ public class DbHelper extends SQLiteOpenHelper {
                 "       phone_no TEXT" +
                 "   )";
 
+        String createTableAllContacts
+                = "CREATE TABLE ALLCONTACTS(" +
+                "       _id INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "       contact_name TEXT," +
+                "       contact_number TEXT," +
+                "       checker TEXT" +
+                "   )";
 
 
         this.sqLiteDatabase.execSQL(createTableContact);
         this.sqLiteDatabase.execSQL(createTableProfile);
+        this.sqLiteDatabase.execSQL(createTableAllContacts);
     }
 
     @Override

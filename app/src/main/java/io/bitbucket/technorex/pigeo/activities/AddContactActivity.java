@@ -1,6 +1,7 @@
 package io.bitbucket.technorex.pigeo.activities;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -10,9 +11,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.*;
 import android.widget.CheckBox;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 import io.bitbucket.technorex.pigeo.Domain.Contact;
 import io.bitbucket.technorex.pigeo.R;
+import io.bitbucket.technorex.pigeo.Repository.DatabaseContactRepository;
 import io.bitbucket.technorex.pigeo.Service.ContactDatabaseService;
 
 import java.util.ArrayList;
@@ -21,6 +25,7 @@ import java.util.List;
 public class AddContactActivity extends Activity {
 
     private List<Contact> contacts = new ArrayList<>();
+    private ProgressDialog progressDialog;
 
     private RecyclerView contactsRecyclerView;
 
@@ -28,13 +33,14 @@ public class AddContactActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
+        progressDialog = new ProgressDialog(this);
         prepareListView();
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-        retrieveCards();
+        retrieveContacts();
     }
 
     @Override
@@ -47,18 +53,47 @@ public class AddContactActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if(item.getItemId() == R.id.back)
             finish();
+        else if(item.getItemId() == R.id.re_sync)
+            retrieveContacts();
+        else if(item.getItemId() == R.id.save){
+            //TODO: need to add code for saving contacts
+        }
         return super.onOptionsItemSelected(item);
     }
 
-    private void retrieveCards() {
-        contacts = getContacts();
+    private void retrieveContacts() {
+        contacts = getContactsFromDatabase();
 
+        if(contacts == null){
+            contacts = getContacts();
+        }
+        Toast.makeText(this,contacts.get(1).toString(),Toast.LENGTH_LONG).show();
         AddContactAdapter addContactAdapter = (AddContactActivity.AddContactAdapter) contactsRecyclerView.getAdapter();
         assert addContactAdapter != null;
         addContactAdapter.setContacts(contacts);
         addContactAdapter.notifyDataSetChanged();
     }
 
+    private List<Contact> getContactsFromDatabase() {
+        DatabaseContactRepository databaseContactRepository
+                = new DatabaseContactRepository(this);
+        List<Contact> contacts;
+        contacts = databaseContactRepository.getAllContacts();
+        return contacts;
+    }
+
+    private class RetrieveAllContacts extends Thread{
+        RetrieveAllContacts(){
+
+        }
+
+        @Override
+        public void run() {
+            synchronized (contacts){
+                contacts = getContacts();
+            }
+        }
+    }
     private List<Contact> getContacts() {
         List<Contact> contacts = new ArrayList<>();
 
@@ -79,6 +114,9 @@ public class AddContactActivity extends Activity {
             phoneCursor.close();
         }
         cursor.close();
+        DatabaseContactRepository databaseContactRepository
+                = new DatabaseContactRepository(this);
+        databaseContactRepository.addToAllContacts(contacts);
         return contacts;
     }
 
@@ -118,7 +156,9 @@ public class AddContactActivity extends Activity {
 
             contactListItemViewHolder.contactName.setText(contact.getContactName());
             contactListItemViewHolder.contactNumber.setText(contact.getContactNumber());
-
+            if(contact.getChecker().equals("yes")){
+                contactListItemViewHolder.checkBox.setChecked(true);
+            }
             contactListItemViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

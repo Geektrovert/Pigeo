@@ -9,6 +9,7 @@ public class Contact implements Serializable {
     private String contactName;
     private String contactNumber;
     private String id;
+    private String checker="no";
 
     public Contact(String contactName, String contactNumber, String id) {
         this.contactName = contactName;
@@ -16,9 +17,11 @@ public class Contact implements Serializable {
         this.id = id;
     }
 
-    public Contact(String contactName, String contactNumber) {
+    public Contact(String contactName, String contactNumber, String id, String checker) {
         this.contactName = contactName;
         this.contactNumber = contactNumber;
+        this.id = id;
+        this.checker = checker;
     }
 
     public String getContactName() {
@@ -45,6 +48,14 @@ public class Contact implements Serializable {
         this.id = id;
     }
 
+    public String getChecker() {
+        return checker;
+    }
+
+    public void setChecker(String checker) {
+        this.checker = checker;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -52,13 +63,13 @@ public class Contact implements Serializable {
         Contact contact = (Contact) o;
         return Objects.equals(getContactName(), contact.getContactName()) &&
                 Objects.equals(getContactNumber(), contact.getContactNumber()) &&
-                Objects.equals(getId(), contact.getId());
+                Objects.equals(getId(), contact.getId()) &&
+                Objects.equals(getChecker(), contact.getChecker());
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(getContactName(), getContactNumber(), getId());
+        return Objects.hash(getContactName(), getContactNumber(), getId(), getChecker());
     }
 
     @NonNull
@@ -67,7 +78,8 @@ public class Contact implements Serializable {
         return "Contact{" +
                 "contactName='" + contactName + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
-                ", id=" + id +
+                ", id='" + id + '\'' +
+                ", checker='" + checker + '\'' +
                 '}';
     }
 }

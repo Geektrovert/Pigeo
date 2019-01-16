@@ -36,11 +36,38 @@ public class DatabaseContactRepository implements ContactRepository{
         return contacts;
     }
 
+    public List<Contact> getAllContacts(){
+        List<Contact> contacts = new ArrayList<>();
+        try(SQLiteDatabase db = new DbHelper(context).getReadableDatabase();
+            Cursor cursor= db.query("ALLCONTACTS",null,null,null,null,null,null)){
+            while (cursor.moveToNext()){
+                contacts.add(
+                        new Contact(
+                                cursor.getString(cursor.getColumnIndexOrThrow("contact_name")),
+                                cursor.getString(cursor.getColumnIndexOrThrow("contact_number")),
+                                cursor.getString(cursor.getColumnIndexOrThrow("_id")),
+                                cursor.getString(cursor.getColumnIndexOrThrow("checker"))
+                        )
+                );
+            }
+        }
+        return contacts;
+    }
+
     @Override
     public void addContact(Contact contact) {
         ContentValues contentValues = getContentValues(contact);
         try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()){
             db.insertOrThrow("CONTACTS",null,contentValues);
+        }
+    }
+
+    public void addToAllContacts(List<Contact> contacts){
+        try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()) {
+            for(Contact contact : contacts){
+                ContentValues contentValues = getContentValues(contact);
+                db.insertOrThrow("ALLCONTACTS",null,contentValues);
+            }
         }
     }
 

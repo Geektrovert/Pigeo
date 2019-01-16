@@ -8,7 +8,7 @@ import io.bitbucket.technorex.pigeo.Repository.DatabaseContactRepository;
 import java.util.List;
 
 public class ContactDatabaseService {
-    private ContactRepository contactRepository;
+    private DatabaseContactRepository contactRepository;
 
     public ContactDatabaseService(Context context){
         contactRepository=new DatabaseContactRepository(context);
@@ -28,5 +28,13 @@ public class ContactDatabaseService {
 
     public void deleteContact(Contact contact){
         contactRepository.deleteContact(contact);
+    }
+
+    public List<Contact> getAllContacts(){
+        return contactRepository.getAllContacts();
+    }
+
+    public void addToAllContacts(List<Contact> contacts){
+        contactRepository.addToAllContacts(contacts);
     }
 }

@@ -44,4 +44,5 @@
 	<string name="send_recovery_email">Send Recovery Email</string>
 	<string name="recovery_success">A recovery mail has been sent to your email.</string>
 	<string name="back_to_homepage">Back to homepage</string>
+	<string name="re_sync_contacts">re-sync contacts</string>
 </resources>

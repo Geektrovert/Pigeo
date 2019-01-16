@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+	<item android:id="@+id/re_sync"
+		  android:title="@string/re_sync_contacts"
+		  android:icon="@android:drawable/ic_popup_sync"
+		  android:showAsAction="ifRoom"/>
+	<item android:id="@+id/save"
+		  android:title="@string/save"
+		  android:icon="@android:drawable/ic_menu_save"
+		  android:showAsAction="ifRoom"/>
 	<item android:id="@+id/back"
 		  android:title="@string/back"
-		  android:icon="@drawable/back"
+		  android:icon="@android:drawable/ic_menu_revert"
 		  android:showAsAction="ifRoom"/>
 
 </menu>
