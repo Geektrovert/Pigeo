@@ -11,6 +11,8 @@ public class Contact implements Serializable {
     private String id;
     private String checker="no";
 
+    public Contact() {}
+
     public Contact(String contactName, String contactNumber, String id) {
         this.contactName = contactName;
         this.contactNumber = contactNumber;
