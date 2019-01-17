@@ -73,6 +73,15 @@ public class DatabaseContactRepository implements ContactRepository{
             }
         }
     }
+    public String getContactCount(){
+        int i=0;
+        try(SQLiteDatabase db = new DbHelper(context).getReadableDatabase();
+            Cursor cursor= db.query("ALLCONTACTS",null,null,null,null,null,null)){
+            while (cursor.moveToNext())
+                i++;
+        }
+        return Integer.toString(i);
+    }
 
     public void resetContacts() {
         try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()){

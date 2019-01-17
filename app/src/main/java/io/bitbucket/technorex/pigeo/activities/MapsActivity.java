@@ -19,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.database.*;
 import io.bitbucket.technorex.pigeo.Domain.UserCount;
 import io.bitbucket.technorex.pigeo.R;
+import io.bitbucket.technorex.pigeo.Repository.DatabaseContactRepository;
 
 /**Project Pigeo
  * @author Sihan Tawsik, Samnan Rahee
@@ -50,6 +51,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bindWidgets();
         bindListeners();
         activeUserThread.start();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        DatabaseContactRepository databaseContactRepository = new DatabaseContactRepository(this);
+        contacts.setText(databaseContactRepository.getContactCount());
     }
 
     private void bindWidgets() {
