@@ -76,7 +76,7 @@ public class DatabaseContactRepository implements ContactRepository{
     public String getContactCount(){
         int i=0;
         try(SQLiteDatabase db = new DbHelper(context).getReadableDatabase();
-            Cursor cursor= db.query("ALLCONTACTS",null,null,null,null,null,null)){
+            Cursor cursor= db.query("CONTACTS",null,null,null,null,null,null)){
             while (cursor.moveToNext())
                 i++;
         }
