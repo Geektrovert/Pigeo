@@ -17,12 +17,12 @@ public class ContactServerService {
         contactRepository.listContactsAsync(resultListener);
     }
 
-    public void addContact(Contact contact){
-        contactRepository.addContact(contact);
+    public void addContact(Contact contact, String id){
+        contactRepository.addContact(contact, id);
     }
 
-    public void updateContact(Contact contact){
-        contactRepository.updateContact(contact);
+    public void updateContact(Contact contact, String id){
+        contactRepository.updateContact(contact, id);
     }
 
     public void deleteContact(Contact contact){
