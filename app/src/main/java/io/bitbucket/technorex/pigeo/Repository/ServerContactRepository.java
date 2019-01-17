@@ -17,7 +17,7 @@ import java.util.Objects;
 
 public class ServerContactRepository implements ContactRepository{
     private static FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-    private static final String DB_COLLECTION_NAME = "/Contacts/"+ Objects.requireNonNull(firebaseUser).getEmail()+"/Contacts/";
+    private static final String DB_COLLECTION_NAME = "ContactsList";
     private static final String LOG_TAG = "Pigeo";
 
     private FirebaseFirestore db;
@@ -33,6 +33,8 @@ public class ServerContactRepository implements ContactRepository{
 
     public void listContactsAsync(final ContactRepository.OnResultListener<List<Contact>> resultListener) {
         db.collection(DB_COLLECTION_NAME)
+                .document(Objects.requireNonNull(firebaseUser.getEmail()))
+                .collection("Contacts")
                 .get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
