@@ -51,6 +51,8 @@ public class DatabaseContactRepository implements ContactRepository{
                 );
             }
         }
+        if(contacts.size() == 0 )
+            return null;
         return contacts;
     }
 

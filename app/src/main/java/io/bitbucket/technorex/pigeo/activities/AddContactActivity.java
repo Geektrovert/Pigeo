@@ -9,6 +9,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.*;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
@@ -54,11 +55,19 @@ public class AddContactActivity extends Activity {
         if(item.getItemId() == R.id.back)
             finish();
         else if(item.getItemId() == R.id.re_sync)
-            retrieveContacts();
+            reSyncContacts();
         else if(item.getItemId() == R.id.save){
             //TODO: need to add code for saving contacts
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void reSyncContacts() {
+        contacts = getContacts();
+        AddContactAdapter addContactAdapter = (AddContactActivity.AddContactAdapter) contactsRecyclerView.getAdapter();
+        assert addContactAdapter != null;
+        addContactAdapter.setContacts(contacts);
+        addContactAdapter.notifyDataSetChanged();
     }
 
     private void retrieveContacts() {
@@ -67,7 +76,7 @@ public class AddContactActivity extends Activity {
         if(contacts == null){
             contacts = getContacts();
         }
-        Toast.makeText(this,contacts.get(1).toString(),Toast.LENGTH_LONG).show();
+
         AddContactAdapter addContactAdapter = (AddContactActivity.AddContactAdapter) contactsRecyclerView.getAdapter();
         assert addContactAdapter != null;
         addContactAdapter.setContacts(contacts);
@@ -156,9 +165,9 @@ public class AddContactActivity extends Activity {
 
             contactListItemViewHolder.contactName.setText(contact.getContactName());
             contactListItemViewHolder.contactNumber.setText(contact.getContactNumber());
-            if(contact.getChecker().equals("yes")){
-                contactListItemViewHolder.checkBox.setChecked(true);
-            }
+//            if(contact.getChecker().equals("yes")){
+//                contactListItemViewHolder.checkBox.setChecked(true);
+//            }
             contactListItemViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
