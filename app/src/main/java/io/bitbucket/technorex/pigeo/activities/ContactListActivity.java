@@ -13,7 +13,9 @@ import android.view.*;
 import android.widget.TextView;
 import io.bitbucket.technorex.pigeo.Domain.Contact;
 import io.bitbucket.technorex.pigeo.R;
+import io.bitbucket.technorex.pigeo.Repository.ContactRepository;
 import io.bitbucket.technorex.pigeo.Service.ContactDatabaseService;
+import io.bitbucket.technorex.pigeo.Service.ContactServerService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,7 +54,18 @@ public class ContactListActivity extends Activity {
 
     private void retrieveCards() {
         ContactDatabaseService contactDatabaseService = new ContactDatabaseService(this);
-        contacts = contactDatabaseService.listContact();
+        ContactServerService contactServerService = new ContactServerService();
+
+        contactServerService.listCardsAsync(new ContactRepository.OnResultListener<List<Contact>>() {
+            @Override
+            public void onResult(List<Contact> data) {
+                contacts = data;
+            }
+        });
+        contactDatabaseService.resetContacts();
+        for(Contact contact: contacts){
+            contactDatabaseService.addContact(contact);
+        }
 
         ContactListAdapter contactListAdapter= (ContactListAdapter) contactsRecyclerView.getAdapter();
         assert contactListAdapter != null;

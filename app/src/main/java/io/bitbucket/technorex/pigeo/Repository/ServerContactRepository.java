@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -11,9 +13,11 @@ import io.bitbucket.technorex.pigeo.Domain.Contact;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ServerContactRepository implements ContactRepository{
-    private static final String DB_COLLECTION_NAME = "Contacts";
+    private static FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    private static final String DB_COLLECTION_NAME = "/Contacts/"+ Objects.requireNonNull(firebaseUser).getEmail()+"/Contacts/";
     private static final String LOG_TAG = "Pigeo";
 
     private FirebaseFirestore db;
@@ -33,13 +37,13 @@ public class ServerContactRepository implements ContactRepository{
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                        List<Contact> cards = new ArrayList<>();
+                        List<Contact> contacts = new ArrayList<>();
 
                         for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            cards.add(document.toObject(Contact.class));
+                            contacts.add(document.toObject(Contact.class));
                         }
 
-                        resultListener.onResult(cards);
+                        resultListener.onResult(contacts);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -59,7 +63,7 @@ public class ServerContactRepository implements ContactRepository{
     @Override
     public void deleteContact(final Contact contact) {
         db.collection(DB_COLLECTION_NAME)
-                .document(contact.getId())
+                .document("Contact"+contact.getId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -87,7 +91,7 @@ public class ServerContactRepository implements ContactRepository{
 
     private void saveContact(final Contact contact) {
         db.collection(DB_COLLECTION_NAME)
-                .document(contact.getId())
+                .document("Contact"+contact.getId())
                 .set(contact)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
