@@ -2,8 +2,11 @@ package io.bitbucket.technorex.pigeo.activities;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.*;
@@ -25,6 +28,7 @@ public class ContactListActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_list);
         prepareListView();
+        checkPermissions();
     }
 
     @Override
@@ -111,6 +115,23 @@ public class ContactListActivity extends Activity {
 
             contactName=view.findViewById(R.id.contact_name);
             contactNumber=view.findViewById(R.id.contact_number);
+        }
+    }
+
+    private void checkPermissions() {
+        String[] permissions = {android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION,
+                android.Manifest.permission.INTERNET,android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                android.Manifest.permission.READ_CONTACTS};
+        String[] permission1 = {android.Manifest.permission.READ_CONTACTS};
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for(String permission : permission1){
+                if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, permission)!= PackageManager.PERMISSION_GRANTED) {
+                    ActivityCompat.requestPermissions(this, new String[]{permission}, 3);
+                }
+                else{
+                    //requestPermissions(new String[]{permission},10);
+                }
+            }
         }
     }
 }
