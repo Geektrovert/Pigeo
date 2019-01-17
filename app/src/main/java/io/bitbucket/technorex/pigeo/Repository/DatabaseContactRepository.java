@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.support.annotation.NonNull;
 import io.bitbucket.technorex.pigeo.Domain.Contact;
 import io.bitbucket.technorex.pigeo.Utils.DbHelper;
@@ -12,9 +13,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseContactRepository implements ContactRepository{
+
     private Context context;
     public DatabaseContactRepository(Context context){
-
         this.context=context;
     }
 
@@ -67,9 +68,23 @@ public class DatabaseContactRepository implements ContactRepository{
     public void addToAllContacts(List<Contact> contacts){
         try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()) {
             for(Contact contact : contacts){
-                ContentValues contentValues = getContentValues(contact);
+                ContentValues contentValues = getAllContentValues(contact);
                 db.insertOrThrow("ALLCONTACTS",null,contentValues);
             }
+        }
+    }
+
+    public void resetContacts() {
+        try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()){
+            String delete = "DELETE FROM CONTACTS";
+            db.execSQL(delete);
+        }
+    }
+
+    public void resetAllContacts() {
+        try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()) {
+            String delete = "DELETE FROM ALLCONTACTS";
+            db.execSQL(delete);
         }
     }
 
@@ -109,8 +124,17 @@ public class DatabaseContactRepository implements ContactRepository{
     @NonNull
     private ContentValues getContentValues(Contact contact) {
         ContentValues values = new ContentValues();
-        values.put("contact_name",contact.getContactName());
-        values.put("contact_number",contact.getContactNumber());
+        values.put("contact_name", contact.getContactName());
+        values.put("contact_number", contact.getContactNumber());
+        return values;
+    }
+
+    @NonNull
+    private ContentValues getAllContentValues(Contact contact) {
+        ContentValues values = new ContentValues();
+        values.put("contact_name", contact.getContactName());
+        values.put("contact_number", contact.getContactNumber());
+        values.put("checker", contact.getChecker());
         return values;
     }
 }

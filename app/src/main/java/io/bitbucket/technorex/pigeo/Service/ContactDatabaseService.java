@@ -37,4 +37,8 @@ public class ContactDatabaseService {
     public void addToAllContacts(List<Contact> contacts){
         contactRepository.addToAllContacts(contacts);
     }
+
+    public void resetAllContacts() {contactRepository.resetAllContacts();}
+
+    public void resetContacts() {contactRepository.resetContacts();}
 }

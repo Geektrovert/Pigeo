@@ -12,13 +12,10 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.*;
 import android.widget.CheckBox;
-import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 import io.bitbucket.technorex.pigeo.Domain.Contact;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.DatabaseContactRepository;
-import io.bitbucket.technorex.pigeo.Service.ContactDatabaseService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,8 +53,17 @@ public class AddContactActivity extends Activity {
             finish();
         else if(item.getItemId() == R.id.re_sync)
             reSyncContacts();
-        else if(item.getItemId() == R.id.save){
-            //TODO: need to add code for saving contacts
+        else if(item.getItemId() == R.id.save) {
+            DatabaseContactRepository databaseContactRepository = new DatabaseContactRepository(this);
+            databaseContactRepository.resetContacts();
+            databaseContactRepository.resetAllContacts();
+            for(Contact contact : contacts) {
+                if(contact.getChecker().equals("yes")){
+                    databaseContactRepository.addContact(contact);
+                }
+            }
+            databaseContactRepository.addToAllContacts(contacts);
+            finish();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -73,7 +79,7 @@ public class AddContactActivity extends Activity {
     private void retrieveContacts() {
         contacts = getContactsFromDatabase();
 
-        if(contacts == null){
+        if(contacts == null) {
             contacts = getContacts();
         }
 
@@ -92,13 +98,13 @@ public class AddContactActivity extends Activity {
     }
 
     private class RetrieveAllContacts extends Thread{
-        RetrieveAllContacts(){
+        RetrieveAllContacts() {
 
         }
 
         @Override
         public void run() {
-            synchronized (contacts){
+            synchronized (contacts) {
                 contacts = getContacts();
             }
         }
@@ -118,13 +124,14 @@ public class AddContactActivity extends Activity {
             assert phoneCursor != null;
             while (phoneCursor.moveToNext()){
                 String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                contacts.add(new Contact(name,phoneNumber,id));
+                contacts.add(new Contact(name,phoneNumber,id, "no"));
             }
             phoneCursor.close();
         }
         cursor.close();
         DatabaseContactRepository databaseContactRepository
                 = new DatabaseContactRepository(this);
+        databaseContactRepository.resetAllContacts();
         databaseContactRepository.addToAllContacts(contacts);
         return contacts;
     }
@@ -141,12 +148,12 @@ public class AddContactActivity extends Activity {
         AddContactAdapter(List<Contact> contacts){
             this.contacts = contacts;
         }
-        public void setContacts(List<Contact> contacts){
+        public void setContacts(List<Contact> contacts) {
             this.contacts = contacts;
         }
 
         @Override
-        public int getItemCount(){
+        public int getItemCount() {
             return contacts.size();
         }
 
@@ -161,22 +168,43 @@ public class AddContactActivity extends Activity {
         @Override
         public void onBindViewHolder(@NonNull final AddContactActivity.ContactListItemViewHolder contactListItemViewHolder, int i) {
 
+            final int ii = i;
             final Contact contact  = contacts.get(i);
 
             contactListItemViewHolder.contactName.setText(contact.getContactName());
             contactListItemViewHolder.contactNumber.setText(contact.getContactNumber());
-//            if(contact.getChecker().equals("yes")){
-//                contactListItemViewHolder.checkBox.setChecked(true);
-//            }
+            if(contact.getChecker().equals("yes")){
+                contactListItemViewHolder.checkBox.setChecked(true);
+            }
             contactListItemViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     CheckBox checkBox = contactListItemViewHolder.checkBox;
                     if(checkBox.isChecked()){
                         checkBox.setChecked(false);
+                        contacts.get(ii).setChecker("no");
+                        Log.e("isChecked: no : ", contacts.get(ii).toString());
                     }
-                    else
+                    else {
                         checkBox.setChecked(true);
+                        contacts.get(ii).setChecker("yes");
+                        Log.e("isChecked: yes : ", contacts.get(ii).toString());
+                    }
+                }
+            });
+
+            contactListItemViewHolder.checkBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    CheckBox checkBox = contactListItemViewHolder.checkBox;
+                    if(checkBox.isChecked()){
+                        contacts.get(ii).setChecker("yes");
+                        Log.e("isChecked: no : ", contacts.get(ii).toString());
+                    }
+                    else {
+                        contacts.get(ii).setChecker("no");
+                        Log.e("isChecked: yes : ", contacts.get(ii).toString());
+                    }
                 }
             });
         }
