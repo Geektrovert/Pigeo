@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.os.strictmode.SqliteObjectLeakedViolation;
 import android.support.annotation.NonNull;
 import io.bitbucket.technorex.pigeo.Domain.Contact;
 import io.bitbucket.technorex.pigeo.Utils.DbHelper;

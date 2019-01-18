@@ -58,7 +58,11 @@ public class ServerContactRepository implements ContactRepository{
 
     @Override
     public void addContact(Contact contact) {
-        saveContact(contact);
+
+    }
+
+    public void addContact(Contact contact, String id) {
+        saveContact(contact, id);
     }
 
 
@@ -83,7 +87,11 @@ public class ServerContactRepository implements ContactRepository{
 
     @Override
     public void updateContact(Contact contact) {
-        saveContact(contact);
+
+    }
+
+    public void updateContact(Contact contact, String id) {
+        saveContact(contact, id);
     }
 
     @Override
@@ -91,9 +99,11 @@ public class ServerContactRepository implements ContactRepository{
         return null;
     }
 
-    private void saveContact(final Contact contact) {
+    private void saveContact(final Contact contact, String id) {
         db.collection(DB_COLLECTION_NAME)
-                .document("Contact"+contact.getId())
+                .document(Objects.requireNonNull(firebaseUser.getEmail()))
+                .collection("Contacts")
+                .document("Contact" + id)
                 .set(contact)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

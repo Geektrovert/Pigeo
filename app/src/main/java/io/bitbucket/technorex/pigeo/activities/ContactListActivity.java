@@ -9,6 +9,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.*;
 import android.widget.TextView;
 import io.bitbucket.technorex.pigeo.Domain.Contact;
@@ -36,7 +37,7 @@ public class ContactListActivity extends Activity {
     @Override
     protected void onStart() {
         super.onStart();
-        retrieveCards();
+        retrieveContacts();
     }
 
     @Override
@@ -52,7 +53,7 @@ public class ContactListActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void retrieveCards() {
+    private void retrieveContacts() {
         final ContactDatabaseService contactDatabaseService = new ContactDatabaseService(this);
         ContactServerService contactServerService = new ContactServerService();
 
@@ -60,23 +61,24 @@ public class ContactListActivity extends Activity {
             @Override
             public void onResult(List<Contact> data) {
                 contacts = data;
-                contactDatabaseService.resetContacts();
-                for(Contact contact: contacts){
-                    contactDatabaseService.addContact(contact);
-                }
-
                 ContactListAdapter contactListAdapter= (ContactListAdapter) contactsRecyclerView.getAdapter();
                 assert contactListAdapter != null;
                 contactListAdapter.setContacts(contacts);
                 contactListAdapter.notifyDataSetChanged();
+                contactDatabaseService.resetContacts();
+
+                for(Contact contact: contacts){
+                    contactDatabaseService.addContact(contact);
+                    Log.e("-----Contact --->>> ", contact.toString());
+                }
             }
         });
-
     }
 
     private void prepareListView() {
         contactsRecyclerView = findViewById(R.id.contact_list);
         contactsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        retrieveContacts();
         contactsRecyclerView.setAdapter(new ContactListAdapter(contacts));
     }
 
@@ -141,9 +143,6 @@ public class ContactListActivity extends Activity {
             for(String permission : permission1){
                 if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, permission)!= PackageManager.PERMISSION_GRANTED) {
                     ActivityCompat.requestPermissions(this, new String[]{permission}, 3);
-                }
-                else{
-                    //requestPermissions(new String[]{permission},10);
                 }
             }
         }

@@ -16,6 +16,7 @@ import android.widget.TextView;
 import io.bitbucket.technorex.pigeo.Domain.Contact;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.DatabaseContactRepository;
+import io.bitbucket.technorex.pigeo.Repository.ServerContactRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,9 +58,13 @@ public class AddContactActivity extends Activity {
             DatabaseContactRepository databaseContactRepository = new DatabaseContactRepository(this);
             databaseContactRepository.resetContacts();
             databaseContactRepository.resetAllContacts();
+
+            ServerContactRepository serverContactRepository = new ServerContactRepository();
+
             for(Contact contact : contacts) {
                 if(contact.getChecker().equals("yes")){
                     databaseContactRepository.addContact(contact);
+                    serverContactRepository.addContact(contact, contact.getId());
                 }
             }
             databaseContactRepository.addToAllContacts(contacts);
