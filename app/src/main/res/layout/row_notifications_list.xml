@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:gravity="center"
+		android:paddingStart="16dp"
+		android:paddingEnd="16dp"
+		android:layout_margin="5dp"
+		android:background="@drawable/border_background">
+
+	<TextView
+			android:id="@+id/notification_text"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textSize="19sp"
+			android:textColor="#fafafa"
+			android:text="@string/notification_message"/>
+	<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="horizontal"
+			android:gravity="center">
+		<Button
+				android:id="@+id/cancelSOS"
+				android:text="@string/cancel"
+				android:background="@drawable/round_button_red"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				tools:ignore="ButtonStyle"
+				android:textColor="#fafafa"
+				android:layout_margin="5dp"/>
+		<Button
+				android:id="@+id/acceptSOS"
+				android:text="@string/accept"
+				android:background="@drawable/round_button_green"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				tools:ignore="ButtonStyle"
+				android:textColor="#0f0f0f"
+				android:layout_margin="5dp"/>
+	</LinearLayout>
+</LinearLayout>

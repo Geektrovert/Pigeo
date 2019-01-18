@@ -31,7 +31,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @SuppressWarnings("FieldCanBeLocal")
     private GoogleMap mMap;
-    private Button contacts,onlineUsers, sosButton;
+    private Button contacts,onlineUsers, notificationButton;
     @SuppressWarnings("FieldCanBeLocal")
     private ActiveUserThread activeUserThread;
     @SuppressWarnings("FieldCanBeLocal")
@@ -79,7 +79,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         contacts = findViewById(R.id.contacts);
         onlineUsers = findViewById(R.id.active_users);
-        sosButton = findViewById(R.id.notifications);
+        notificationButton = findViewById(R.id.notifications);
     }
 
     private void bindListeners() {
@@ -87,6 +87,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MapsActivity.this,ContactListActivity.class));
+            }
+        });
+        notificationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MapsActivity.this, NotificationActivity.class));
             }
         });
         onlineUsers.setClickable(false);
@@ -212,7 +218,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     for(DataSnapshot ds : dataSnapshot.getChildren()){
                         UserCount userCount = ds.getValue(UserCount.class);
                         assert userCount != null;
-                        sosButton.setText(userCount.getNumbers());
+                        notificationButton.setText(userCount.getNumbers());
                         break;
                     }
                 }
