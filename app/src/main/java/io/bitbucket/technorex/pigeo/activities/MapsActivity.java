@@ -17,9 +17,11 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.database.*;
+import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.Domain.UserCount;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.DatabaseContactRepository;
+import io.bitbucket.technorex.pigeo.Repository.DatabaseProfileRepository;
 
 /**Project Pigeo
  * @author Sihan Tawsik, Samnan Rahee
@@ -29,17 +31,21 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @SuppressWarnings("FieldCanBeLocal")
     private GoogleMap mMap;
-    private Button contacts,onlineUsers;
+    private Button contacts,onlineUsers, sosButton;
     @SuppressWarnings("FieldCanBeLocal")
     private ActiveUserThread activeUserThread;
+    @SuppressWarnings("FieldCanBeLocal")
+    private SOSCountThread sosCountThread;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         activeUserThread = new ActiveUserThread();
+        sosCountThread = new SOSCountThread();
         try {
             activeUserThread.join();
+            sosCountThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -51,6 +57,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bindWidgets();
         bindListeners();
         activeUserThread.start();
+        sosCountThread.start();
     }
 
     @Override
@@ -72,6 +79,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         });
         contacts = findViewById(R.id.contacts);
         onlineUsers = findViewById(R.id.active_users);
+        sosButton = findViewById(R.id.notifications);
     }
 
     private void bindListeners() {
@@ -172,6 +180,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             check = false;
                             databaseReference1.child("number").setValue(onlineUserCount.getNumber() + 1);
                         }
+                        break;
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        }
+    }
+
+
+    private class SOSCountThread extends Thread{
+
+        private DatabaseReference databaseReference;
+        private boolean check=true;
+
+        SOSCountThread(){
+            DatabaseProfileRepository databaseProfileRepository = new DatabaseProfileRepository(MapsActivity.this);
+            Profile profile = databaseProfileRepository.retrieveProfile();
+            databaseReference= FirebaseDatabase.getInstance().getReference("/soscount/" + profile.getId());
+        }
+
+        @Override
+        public void run() {
+            databaseReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot ds : dataSnapshot.getChildren()){
+                        UserCount userCount = ds.getValue(UserCount.class);
+                        assert userCount != null;
+                        sosButton.setText(userCount.getNumbers());
                         break;
                     }
                 }
