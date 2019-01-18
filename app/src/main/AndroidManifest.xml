@@ -67,8 +67,6 @@
 				android:theme="@style/AppTheme.EditProfile"/>
 		<activity android:name=".activities.ContactListActivity">
 		</activity>
-		<activity android:name=".activities.EditContactActivity">
-		</activity>
 		<activity android:name=".activities.AddContactActivity">
 		</activity>
 		<activity android:name=".activities.RetrievePassword">

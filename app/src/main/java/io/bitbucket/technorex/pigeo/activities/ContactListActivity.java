@@ -63,11 +63,11 @@ public class ContactListActivity extends Activity {
                 contacts = data;
                 ContactListAdapter contactListAdapter= (ContactListAdapter) contactsRecyclerView.getAdapter();
                 assert contactListAdapter != null;
-                contactListAdapter.setContacts(contacts);
+                contactListAdapter.setContacts(data);
                 contactListAdapter.notifyDataSetChanged();
                 contactDatabaseService.resetContacts();
 
-                for(Contact contact: contacts){
+                for(Contact contact: data){
                     contactDatabaseService.addContact(contact);
                     Log.e("-----Contact --->>> ", contact.toString());
                 }
@@ -112,13 +112,6 @@ public class ContactListActivity extends Activity {
 
             contactListItemViewHolder.contactName.setText(contact.getContactName());
             contactListItemViewHolder.contactNumber.setText(contact.getContactNumber());
-
-            contactListItemViewHolder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startActivity(new Intent(ContactListActivity.this,EditContactActivity.class).putExtra("contact",contact));
-                }
-            });
         }
     }
 

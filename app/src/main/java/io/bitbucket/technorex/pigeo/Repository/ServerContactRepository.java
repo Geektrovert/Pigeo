@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class ServerContactRepository implements ContactRepository{
-    private static FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+    private FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
     private static final String DB_COLLECTION_NAME = "ContactsList";
     private static final String LOG_TAG = "Pigeo";
 
@@ -32,6 +32,7 @@ public class ServerContactRepository implements ContactRepository{
     }
 
     public void listContactsAsync(final ContactRepository.OnResultListener<List<Contact>> resultListener) {
+        Log.e("***-----MAIL--->>> ", firebaseUser.getEmail());
         db.collection(DB_COLLECTION_NAME)
                 .document(Objects.requireNonNull(firebaseUser.getEmail()))
                 .collection("Contacts")
