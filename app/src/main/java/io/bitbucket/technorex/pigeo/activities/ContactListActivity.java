@@ -53,24 +53,25 @@ public class ContactListActivity extends Activity {
     }
 
     private void retrieveCards() {
-        ContactDatabaseService contactDatabaseService = new ContactDatabaseService(this);
+        final ContactDatabaseService contactDatabaseService = new ContactDatabaseService(this);
         ContactServerService contactServerService = new ContactServerService();
 
         contactServerService.listCardsAsync(new ContactRepository.OnResultListener<List<Contact>>() {
             @Override
             public void onResult(List<Contact> data) {
                 contacts = data;
+                contactDatabaseService.resetContacts();
+                for(Contact contact: contacts){
+                    contactDatabaseService.addContact(contact);
+                }
+
+                ContactListAdapter contactListAdapter= (ContactListAdapter) contactsRecyclerView.getAdapter();
+                assert contactListAdapter != null;
+                contactListAdapter.setContacts(contacts);
+                contactListAdapter.notifyDataSetChanged();
             }
         });
-        contactDatabaseService.resetContacts();
-        for(Contact contact: contacts){
-            contactDatabaseService.addContact(contact);
-        }
 
-        ContactListAdapter contactListAdapter= (ContactListAdapter) contactsRecyclerView.getAdapter();
-        assert contactListAdapter != null;
-        contactListAdapter.setContacts(contacts);
-        contactListAdapter.notifyDataSetChanged();
     }
 
     private void prepareListView() {
