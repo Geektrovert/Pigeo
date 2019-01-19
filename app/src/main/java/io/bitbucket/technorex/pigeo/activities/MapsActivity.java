@@ -17,11 +17,15 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.database.*;
+import io.bitbucket.technorex.pigeo.Domain.Contact;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.Domain.UserCount;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.DatabaseContactRepository;
 import io.bitbucket.technorex.pigeo.Repository.DatabaseProfileRepository;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**Project Pigeo
  * @author Sihan Tawsik, Samnan Rahee
@@ -66,18 +70,48 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private void bindWidgets() {
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setSelectedItemId(R.id.home);
-        BottomNavigationItemView bottomNavigationItemView = findViewById(R.id.user_icon);
-        bottomNavigationItemView.setOnClickListener(new View.OnClickListener() {
+        BottomNavigationItemView userBottomNavigationItemView = findViewById(R.id.user_icon);
+        userBottomNavigationItemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MapsActivity.this,ProfileDetailsActivity.class));
             }
         });
+
+        BottomNavigationItemView sosBottomNavigationItemView = findViewById(R.id.sos);
+        sosBottomNavigationItemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendSOS();
+                //startActivity(new Intent(MapsActivity.this,SOSActivity.class));
+            }
+        });
+
         contacts = findViewById(R.id.contacts);
         onlineUsers = findViewById(R.id.active_users);
         notificationButton = findViewById(R.id.notifications);
         databaseProfileRepository = new DatabaseProfileRepository(this);
         profile = databaseProfileRepository.retrieveProfile();
+    }
+
+    private void sendSOS() {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("/");
+        final List<Contact> contacts;
+        DatabaseContactRepository databaseContactRepository
+                = new DatabaseContactRepository(this);
+
+        contacts = databaseContactRepository.listContacts();
+        for(Contact contact : contacts){
+            databaseReference
+                    .child(contact.getContactNumber())
+                    .child(profile.getPhoneNO())
+                    .child("name").setValue(profile.getUserName());
+
+            databaseReference
+                    .child(contact.getContactNumber())
+                    .child(profile.getPhoneNO())
+                    .child("contactNumber").setValue(profile.getPhoneNO());
+        }
     }
 
     private void bindListeners() {
