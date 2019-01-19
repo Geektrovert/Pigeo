@@ -32,6 +32,7 @@ public class AddContactActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_contact);
+        setTitle("Add new contacts");
         progressDialog = new ProgressDialog(this);
         prepareListView();
     }

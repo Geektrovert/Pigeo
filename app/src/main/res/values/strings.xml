@@ -47,4 +47,5 @@
 	<string name="re_sync_contacts">re-sync contacts</string>
 	<string name="notification_message">Someone from 1.55km distance needs help!</string>
 	<string name="accept">Accept</string>
+	<string name="title_activity_sos">Map</string>
 </resources>

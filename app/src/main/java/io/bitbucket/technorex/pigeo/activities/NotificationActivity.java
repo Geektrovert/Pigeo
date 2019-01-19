@@ -1,6 +1,7 @@
 package io.bitbucket.technorex.pigeo.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,6 +30,7 @@ public class NotificationActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_notification);
+        setTitle("Notifications");
         prepareListView();
     }
 
@@ -111,7 +113,7 @@ public class NotificationActivity extends Activity {
             notificationsListItemViewHolder.acceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO: Start a new activity to track the location where help is needed
+                    startActivity(new Intent(NotificationActivity.this, SOSActivity.class));
                 }
             });
         }

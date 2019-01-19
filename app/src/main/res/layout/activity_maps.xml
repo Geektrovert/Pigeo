@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_alignParentBottom="true"
-            android:background="#167496"
+            android:background="#043A50"
             app:menu="@menu/bottom_nav_menu"/>
     <fragment
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
 			android:layout_above="@id/bottom_nav"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:background="#070707"
+			android:background="#167496"
 			android:gravity="center"
 			android:orientation="horizontal">
 		<Button
@@ -35,7 +35,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_margin="10dp"
-				android:text="5"
 				android:drawableStart="@drawable/bell"
 				android:paddingStart="20dp"
 				android:paddingEnd="20dp"
@@ -57,7 +56,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_margin="10dp"
-				android:text="5"
 				android:drawableStart="@drawable/contacts"
 				android:paddingStart="20dp"
 				android:paddingEnd="20dp"
