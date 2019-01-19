@@ -24,7 +24,7 @@ import java.util.List;
 public class AddContactActivity extends Activity {
 
     private List<Contact> contacts = new ArrayList<>();
-    private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog = new ProgressDialog(this);
 
     private RecyclerView contactsRecyclerView;
 
@@ -34,6 +34,7 @@ public class AddContactActivity extends Activity {
         setContentView(R.layout.activity_add_contact);
         setTitle("Add new contacts");
         progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Re-syncing contacts...");
         prepareListView();
     }
 
@@ -75,20 +76,24 @@ public class AddContactActivity extends Activity {
     }
 
     private void reSyncContacts() {
-        contacts = getContacts();
-        AddContactAdapter addContactAdapter = (AddContactActivity.AddContactAdapter) contactsRecyclerView.getAdapter();
-        assert addContactAdapter != null;
-        addContactAdapter.setContacts(contacts);
-        addContactAdapter.notifyDataSetChanged();
+        progressDialog.show();
+        RetrieveAllContacts retrieveAllContacts = new RetrieveAllContacts();
+        retrieveAllContacts.start();
     }
 
     private void retrieveContacts() {
         contacts = getContactsFromDatabase();
+        if(contacts!=null) notifyAdapter();
 
         if(contacts == null) {
-            contacts = getContacts();
+            progressDialog.show();
+            RetrieveAllContacts retrieveAllContacts = new RetrieveAllContacts();
+            retrieveAllContacts.start();
         }
 
+    }
+
+    private void notifyAdapter() {
         AddContactAdapter addContactAdapter = (AddContactActivity.AddContactAdapter) contactsRecyclerView.getAdapter();
         assert addContactAdapter != null;
         addContactAdapter.setContacts(contacts);
@@ -112,6 +117,8 @@ public class AddContactActivity extends Activity {
         public void run() {
             synchronized (contacts) {
                 contacts = getContacts();
+                progressDialog.dismiss();
+                notifyAdapter();
             }
         }
     }
