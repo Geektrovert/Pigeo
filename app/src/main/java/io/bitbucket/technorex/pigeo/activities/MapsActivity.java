@@ -207,7 +207,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SOSCountThread(){
             DatabaseProfileRepository databaseProfileRepository = new DatabaseProfileRepository(MapsActivity.this);
             Profile profile = databaseProfileRepository.retrieveProfile();
-            databaseReference= FirebaseDatabase.getInstance().getReference("/soscount/" + profile.getId());
+            databaseReference= FirebaseDatabase.getInstance().getReference("/soscount/" + profile.getPhoneNO());
         }
 
         @Override
