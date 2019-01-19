@@ -115,7 +115,7 @@ public class ServerContactRepository implements ContactRepository{
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(LOG_TAG, "Failed to save card: " + contact, e);
+                        Log.e(LOG_TAG, "Failed to save contact: " + contact, e);
                     }
                 });
     }
