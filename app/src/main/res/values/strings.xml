@@ -48,4 +48,8 @@
 	<string name="notification_message">Someone from 1.55km distance needs help!</string>
 	<string name="accept">Accept</string>
 	<string name="title_activity_sos">Map</string>
+	<string name="default_info_title">Default Location</string>
+	<string name="default_info_snippet">No places found, because location permission is disabled.</string>
+	<string name="option_get_place">Get place</string>
+	<string name="pick_place">Choose a place</string>
 </resources>
