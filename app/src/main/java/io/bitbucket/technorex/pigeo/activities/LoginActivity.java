@@ -17,6 +17,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.ProfileRepository;
@@ -126,6 +128,9 @@ public class LoginActivity extends Activity {
                                     ProfileDatabaseService profileDatabaseService = new ProfileDatabaseService(LoginActivity.this);
                                     profileDatabaseService.reset();
                                     profileDatabaseService.addProfile(data);
+                                    DatabaseReference onlineUserDatabaseReference
+                                            = FirebaseDatabase.getInstance().getReference("/Online/");
+                                    onlineUserDatabaseReference.child(data.getPhoneNO()).setValue("true");
                                     progressDialog.dismiss();
                                     startActivity(new Intent(LoginActivity.this,MapsActivity.class));
                                 }

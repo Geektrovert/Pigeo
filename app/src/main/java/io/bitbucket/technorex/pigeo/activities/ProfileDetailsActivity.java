@@ -59,29 +59,9 @@ public class ProfileDetailsActivity extends Activity {
     }
 
     private void updateOnlineUserCount() {
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("/Online/");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            private boolean check=true;
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    UserCount onlineUserCount = ds.getValue(UserCount.class);
-                    DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("/Online/Users/");
-                    assert onlineUserCount != null;
-                    if (check) {
-                        check = false;
-                        databaseReference1.child("number").setValue(onlineUserCount.getNumber() - 1);
-                        profile.logOut();
-                        startActivity(new Intent(ProfileDetailsActivity.this, LoginActivity.class));
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        DatabaseReference onlineUserDatabaseReference
+                = FirebaseDatabase.getInstance().getReference("/Online/");
+        onlineUserDatabaseReference.child(profile.getPhoneNO()).setValue(null);
     }
 
     @Override

@@ -33,21 +33,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private Button contacts,onlineUsers, notificationButton;
     @SuppressWarnings("FieldCanBeLocal")
-    private ActiveUserThread activeUserThread;
-    @SuppressWarnings("FieldCanBeLocal")
     private Profile profile;
+    @SuppressWarnings("FieldCanBeLocal")
     private DatabaseProfileRepository databaseProfileRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        activeUserThread = new ActiveUserThread();
-        try {
-            activeUserThread.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -56,7 +49,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         bindWidgets();
         bindListeners();
-        activeUserThread.start();
     }
 
     @Override
@@ -64,6 +56,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         super.onStart();
         DatabaseContactRepository databaseContactRepository = new DatabaseContactRepository(this);
         contacts.setText(databaseContactRepository.getContactCount());
+
+        //updating user activity status
+        DatabaseReference onlineUserDatabaseReference
+                = FirebaseDatabase.getInstance().getReference("/Online/");
+        onlineUserDatabaseReference.child(profile.getPhoneNO()).setValue("true");
     }
 
     private void bindWidgets() {
@@ -100,16 +97,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         onlineUsers.setClickable(false);
 
-        DatabaseReference databaseReference
+        DatabaseReference sosDatabaseReference
                 = FirebaseDatabase.getInstance().getReference("/"+profile.getPhoneNO()+"/");
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        sosDatabaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int count = 0;
-                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                for(DataSnapshot ignored : dataSnapshot.getChildren()){
                     count++;
                 }
                 notificationButton.setText(Integer.toString(count));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });@SuppressWarnings("unused")
+
+        DatabaseReference onlineUserDatabaseReference
+                = FirebaseDatabase.getInstance().getReference("/Online/");
+        onlineUserDatabaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count = 0;
+                for(DataSnapshot ignored : dataSnapshot.getChildren()){
+                    count++;
+                }
+                onlineUsers.setText(Integer.toString(count));
             }
 
             @Override
@@ -148,7 +163,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
             //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
@@ -164,84 +178,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
     }
 
-    private class ActiveUserThread extends Thread{
-
-        private DatabaseReference databaseReference;
-        private boolean check=true;
-
-        ActiveUserThread(){
-            databaseReference= FirebaseDatabase.getInstance().getReference("/Online");
-            updateOnlineUserCount();
-        }
-
-        @Override
-        public void run() {
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(DataSnapshot ds : dataSnapshot.getChildren()){
-                        UserCount userCount = ds.getValue(UserCount.class);
-                        assert userCount != null;
-                        onlineUsers.setText(userCount.getNumbers());
-                        break;
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
-
-        private void updateOnlineUserCount() {
-
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(DataSnapshot ds : dataSnapshot.getChildren()){
-                        UserCount onlineUserCount = ds.getValue(UserCount.class);
-                        DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("/Online/Users/");
-                        assert onlineUserCount != null;
-                        if(check) {
-                            check = false;
-                            databaseReference1.child("number").setValue(onlineUserCount.getNumber() + 1);
-                        }
-                        break;
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("/Online/");
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            private boolean check=true;
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot ds : dataSnapshot.getChildren()) {
-                    UserCount onlineUserCount = ds.getValue(UserCount.class);
-                    DatabaseReference databaseReference1 = FirebaseDatabase.getInstance().getReference("/Online/Users/");
-                    assert onlineUserCount != null;
-                    if (check) {
-                        check = false;
-                        databaseReference1.child("number").setValue(onlineUserCount.getNumber() - 1);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+        databaseReference.child(profile.getPhoneNO()).setValue(null);
     }
 }

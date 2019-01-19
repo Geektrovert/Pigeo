@@ -13,6 +13,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.Domain.UserCount;
 import io.bitbucket.technorex.pigeo.R;
@@ -101,6 +103,9 @@ public class SignUpActivity2 extends Activity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 if(task.isSuccessful()){
+                                    DatabaseReference onlineUserDatabaseReference
+                                            = FirebaseDatabase.getInstance().getReference("/Online/");
+                                    onlineUserDatabaseReference.child(profile.getPhoneNO()).setValue("true");
                                     progressDialog.dismiss();
                                     startActivity(new Intent(SignUpActivity2.this, MapsActivity.class));
                                 }
