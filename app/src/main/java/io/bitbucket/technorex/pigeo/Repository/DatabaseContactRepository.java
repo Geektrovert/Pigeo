@@ -111,6 +111,13 @@ public class DatabaseContactRepository implements ContactRepository{
         }
     }
 
+    public void updateContacts() {
+        try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()){
+            String update = "UPDATE CONTACTS SET checker='no'";
+            db.execSQL(update);
+        }
+    }
+
     @Override
     public Contact retrieveContact(int id) {
         Contact contact=null;

@@ -17,6 +17,7 @@ import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.Domain.UserCount;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.DatabaseProfileRepository;
+import io.bitbucket.technorex.pigeo.Service.ContactDatabaseService;
 import io.bitbucket.technorex.pigeo.Service.ProfileDatabaseService;
 
 import java.util.List;
@@ -52,6 +53,9 @@ public class ProfileDetailsActivity extends Activity {
             public void onClick(View v) {
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                 if(firebaseUser != null) {
+                    ContactDatabaseService contactDatabaseService
+                            = new ContactDatabaseService(ProfileDetailsActivity.this);
+                    contactDatabaseService.updateContacts();
                     updateOnlineUserCount();
                 }
             }

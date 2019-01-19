@@ -41,4 +41,6 @@ public class ContactDatabaseService {
     public void resetAllContacts() {contactRepository.resetAllContacts();}
 
     public void resetContacts() {contactRepository.resetContacts();}
+
+    public void updateContacts(){contactRepository.updateContacts();}
 }

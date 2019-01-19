@@ -130,6 +130,8 @@ public class AddContactActivity extends Activity {
             assert phoneCursor != null;
             while (phoneCursor.moveToNext()){
                 String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                phoneNumber = phoneNumber.replaceAll("-","");
+                phoneNumber = phoneNumber.replaceAll(" ","");
                 contacts.add(new Contact(name,phoneNumber,id, "no"));
             }
             phoneCursor.close();
