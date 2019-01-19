@@ -59,9 +59,11 @@ public class ProfileDetailsActivity extends Activity {
     }
 
     private void updateOnlineUserCount() {
-        DatabaseReference onlineUserDatabaseReference
-                = FirebaseDatabase.getInstance().getReference("/Online/");
-        onlineUserDatabaseReference.child(profile.getPhoneNO()).setValue(null);
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("/Online/");
+        databaseReference.child(profile.getPhoneNO()).setValue(null);
+        profile.logOut();
+        startActivity(new Intent(ProfileDetailsActivity.this, LoginActivity.class));
+
     }
 
     @Override
