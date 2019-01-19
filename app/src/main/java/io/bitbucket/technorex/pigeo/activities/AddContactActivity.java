@@ -24,7 +24,7 @@ import java.util.List;
 public class AddContactActivity extends Activity {
 
     private List<Contact> contacts = new ArrayList<>();
-    private ProgressDialog progressDialog = new ProgressDialog(this);
+    private ProgressDialog progressDialog;
 
     private RecyclerView contactsRecyclerView;
 
@@ -117,8 +117,13 @@ public class AddContactActivity extends Activity {
         public void run() {
             synchronized (contacts) {
                 contacts = getContacts();
-                progressDialog.dismiss();
-                notifyAdapter();
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.dismiss();
+                        notifyAdapter();
+                    }
+                });
             }
         }
     }
