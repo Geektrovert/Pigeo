@@ -112,24 +112,8 @@ public class NotificationActivity extends Activity {
                             = new DatabaseProfileRepository(NotificationActivity.this);
                     Profile profile = databaseProfileRepository.retrieveProfile();
                     DatabaseReference databaseReference
-                            = FirebaseDatabase.getInstance().getReference("/"+profile.getPhoneNO()+"/"+notification.getContactNumber());
-                    ValueEventListener valueEventListener
-                            = new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            for(DataSnapshot ds : dataSnapshot.getChildren()){
-                                ds.getRef().removeValue();
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                        }
-                    };
-                    databaseReference.addValueEventListener(valueEventListener);
-                    databaseReference.removeEventListener(valueEventListener);
-
+                            = FirebaseDatabase.getInstance().getReference("/"+profile.getPhoneNO()+"/");
+                    databaseReference.child(notification.getContactNumber()).setValue(null);
                 }
             });
 
