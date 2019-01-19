@@ -52,7 +52,7 @@ public class ServerContactRepository implements ContactRepository{
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.e(LOG_TAG, "Failed to retrieve cards.", e);
+                        Log.e(LOG_TAG, "Failed to retrieve contacts.", e);
                     }
                 });
     }
@@ -109,7 +109,7 @@ public class ServerContactRepository implements ContactRepository{
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.i(LOG_TAG, "Card saved successfully to FireStore: " + contact);
+                        Log.i(LOG_TAG, "Contact saved successfully to FireStore: " + contact);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
