@@ -15,6 +15,7 @@ import com.google.firebase.database.*;
 import io.bitbucket.technorex.pigeo.Domain.Notification;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
+import io.bitbucket.technorex.pigeo.Repository.DatabaseProfileRepository;
 import io.bitbucket.technorex.pigeo.Service.ProfileDatabaseService;
 
 import java.util.ArrayList;
@@ -100,16 +101,38 @@ public class NotificationActivity extends Activity {
         @Override
         public void onBindViewHolder(@NonNull NotificationsListItemViewHolder notificationsListItemViewHolder, int i) {
 
-            Notification notification  = notifications.get(i);
+            final Notification notification  = notifications.get(i);
             String notification_text = notification.getName() + " is asking you for help.";
 
             notificationsListItemViewHolder.notificationText.setText(notification_text);
             notificationsListItemViewHolder.cancelButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //TODO: DELETE This notification
+                    DatabaseProfileRepository databaseProfileRepository
+                            = new DatabaseProfileRepository(NotificationActivity.this);
+                    Profile profile = databaseProfileRepository.retrieveProfile();
+                    DatabaseReference databaseReference
+                            = FirebaseDatabase.getInstance().getReference("/"+profile.getPhoneNO()+"/"+notification.getContactNumber());
+                    ValueEventListener valueEventListener
+                            = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            for(DataSnapshot ds : dataSnapshot.getChildren()){
+                                ds.getRef().removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    };
+                    databaseReference.addValueEventListener(valueEventListener);
+                    databaseReference.removeEventListener(valueEventListener);
+
                 }
             });
+
             notificationsListItemViewHolder.acceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
