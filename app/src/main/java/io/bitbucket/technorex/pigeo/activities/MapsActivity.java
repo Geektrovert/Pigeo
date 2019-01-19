@@ -35,17 +35,16 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @SuppressWarnings("FieldCanBeLocal")
     private ActiveUserThread activeUserThread;
     @SuppressWarnings("FieldCanBeLocal")
-    private SOSCountThread sosCountThread;
+    private Profile profile;
+    private DatabaseProfileRepository databaseProfileRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         activeUserThread = new ActiveUserThread();
-        sosCountThread = new SOSCountThread();
         try {
             activeUserThread.join();
-            sosCountThread.join();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -58,7 +57,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         bindWidgets();
         bindListeners();
         activeUserThread.start();
-        sosCountThread.start();
     }
 
     @Override
@@ -81,6 +79,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         contacts = findViewById(R.id.contacts);
         onlineUsers = findViewById(R.id.active_users);
         notificationButton = findViewById(R.id.notifications);
+        databaseProfileRepository = new DatabaseProfileRepository(this);
+        profile = databaseProfileRepository.retrieveProfile();
     }
 
     private void bindListeners() {
@@ -90,13 +90,33 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 startActivity(new Intent(MapsActivity.this,ContactListActivity.class));
             }
         });
+
         notificationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MapsActivity.this, NotificationActivity.class));
             }
         });
+
         onlineUsers.setClickable(false);
+
+        DatabaseReference databaseReference
+                = FirebaseDatabase.getInstance().getReference("/"+profile.getPhoneNO()+"/");
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count = 0;
+                for(DataSnapshot ds : dataSnapshot.getChildren()){
+                    count++;
+                }
+                notificationButton.setText(Integer.toString(count));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -187,39 +207,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             check = false;
                             databaseReference1.child("number").setValue(onlineUserCount.getNumber() + 1);
                         }
-                        break;
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
-    }
-
-
-    private class SOSCountThread extends Thread{
-
-        private DatabaseReference databaseReference;
-        private boolean check=true;
-
-        SOSCountThread(){
-            DatabaseProfileRepository databaseProfileRepository = new DatabaseProfileRepository(MapsActivity.this);
-            Profile profile = databaseProfileRepository.retrieveProfile();
-            databaseReference= FirebaseDatabase.getInstance().getReference("/soscount/" + profile.getPhoneNO());
-        }
-
-        @Override
-        public void run() {
-            databaseReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(DataSnapshot ds : dataSnapshot.getChildren()){
-                        UserCount userCount = ds.getValue(UserCount.class);
-                        assert userCount != null;
-                        notificationButton.setText(userCount.getNumbers());
                         break;
                     }
                 }
