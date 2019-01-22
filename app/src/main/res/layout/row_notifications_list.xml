@@ -24,7 +24,7 @@
 			android:gravity="center">
 		<Button
 				android:id="@+id/cancelSOS"
-				android:text="@string/cancel"
+				android:text="@string/delete"
 				android:background="@drawable/round_button_red"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
