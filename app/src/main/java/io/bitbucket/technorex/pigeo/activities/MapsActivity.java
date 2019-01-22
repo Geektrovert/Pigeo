@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.internal.BottomNavigationItemView;
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.firebase.database.*;
 import io.bitbucket.technorex.pigeo.Domain.Contact;
+import io.bitbucket.technorex.pigeo.Domain.MapGps;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.Domain.UserCount;
 import io.bitbucket.technorex.pigeo.R;
@@ -40,6 +42,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Profile profile;
     @SuppressWarnings("FieldCanBeLocal")
     private DatabaseProfileRepository databaseProfileRepository;
+
+    MapGps mGPS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +91,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
+        mGPS = new MapGps(this);
         contacts = findViewById(R.id.contacts);
         onlineUsers = findViewById(R.id.active_users);
         notificationButton = findViewById(R.id.notifications);
@@ -100,6 +105,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         DatabaseContactRepository databaseContactRepository
                 = new DatabaseContactRepository(this);
 
+        Location location = mGPS.getLocation();
         contacts = databaseContactRepository.listContacts();
         for(Contact contact : contacts){
             databaseReference
@@ -111,6 +117,14 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .child(contact.getContactNumber())
                     .child(profile.getPhoneNO())
                     .child("contactNumber").setValue(profile.getPhoneNO());
+            databaseReference
+                    .child(contact.getContactNumber())
+                    .child(profile.getPhoneNO())
+                    .child("latitude").setValue(location.getLatitude());
+            databaseReference
+                    .child(contact.getContactNumber())
+                    .child(profile.getPhoneNO())
+                    .child("longitude").setValue(location.getLongitude());
         }
     }
 
