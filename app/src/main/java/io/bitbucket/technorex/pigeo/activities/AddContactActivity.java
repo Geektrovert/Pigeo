@@ -115,16 +115,14 @@ public class AddContactActivity extends Activity {
 
         @Override
         public void run() {
-            synchronized (contacts) {
-                contacts = getContacts();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progressDialog.dismiss();
-                        notifyAdapter();
-                    }
-                });
-            }
+            contacts = getContacts();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progressDialog.dismiss();
+                    notifyAdapter();
+                }
+            });
         }
     }
     private List<Contact> getContacts() {
