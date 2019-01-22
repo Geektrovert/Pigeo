@@ -14,7 +14,7 @@ public class ContactDatabaseService {
         contactRepository=new DatabaseContactRepository(context);
     }
 
-    public List<Contact> listContact(){
+    public List<Contact> retrieveContacts(){
         return contactRepository.listContacts();
     }
 
