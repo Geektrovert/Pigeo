@@ -33,7 +33,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.*;
 import io.bitbucket.technorex.pigeo.Domain.Contact;
-import io.bitbucket.technorex.pigeo.Domain.MapGps;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.DatabaseContactRepository;
@@ -59,7 +58,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
-    private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
+    private final LatLng mDefaultLocation = new LatLng(23.8103, 90.4125);
     private static final int DEFAULT_ZOOM = 15;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
@@ -79,8 +78,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Profile profile;
     @SuppressWarnings("FieldCanBeLocal")
     private DatabaseProfileRepository databaseProfileRepository;
-
-    MapGps mGPS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,7 +141,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        mGPS = new MapGps(this);
         contacts = findViewById(R.id.contacts);
         onlineUsers = findViewById(R.id.active_users);
         notificationButton = findViewById(R.id.notifications);
@@ -158,7 +154,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         DatabaseContactRepository databaseContactRepository
                 = new DatabaseContactRepository(this);
 
-        Location location = mGPS.getLocation();
         contacts = databaseContactRepository.listContacts();
         for(Contact contact : contacts){
             databaseReference
@@ -170,14 +165,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     .child(contact.getContactNumber())
                     .child(profile.getPhoneNO())
                     .child("contactNumber").setValue(profile.getPhoneNO());
-            databaseReference
-                    .child(contact.getContactNumber())
-                    .child(profile.getPhoneNO())
-                    .child("latitude").setValue(location.getLatitude());
-            databaseReference
-                    .child(contact.getContactNumber())
-                    .child(profile.getPhoneNO())
-                    .child("longitude").setValue(location.getLongitude());
         }
     }
 
@@ -377,7 +364,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        mMap.setMyLocationEnabled(true);
 /*        Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(-34, 151);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));

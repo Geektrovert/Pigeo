@@ -28,8 +28,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.*;
-import com.google.rpc.Help;
-import io.bitbucket.technorex.pigeo.Domain.*;
+import io.bitbucket.technorex.pigeo.Domain.Contact;
+import io.bitbucket.technorex.pigeo.Domain.CustomLocation;
+import io.bitbucket.technorex.pigeo.Domain.Notification;
+import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.DatabaseProfileRepository;
 import io.bitbucket.technorex.pigeo.Service.ContactDatabaseService;
@@ -52,7 +54,7 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
 
     // A default location (Sydney, Australia) and default zoom to use when location permission is
     // not granted.
-    private final LatLng mDefaultLocation = new LatLng(-33.8523341, 151.2106085);
+    private final LatLng mDefaultLocation = new LatLng(23.8103, 90.4125);
     private static final int DEFAULT_ZOOM = 15;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1;
     private boolean mLocationPermissionGranted;
@@ -68,12 +70,10 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
     private Button cancelButton;
 
     private boolean receiveHelp;
-
     private Notification notification;
-
     private Profile profile;
+    private DatabaseReference myReference,otherPeopleReference;
 
-    private MapGps mapGps;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,8 +81,6 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
 
         profile = new DatabaseProfileRepository(this)
                 .retrieveProfile();
-
-        mapGps = new MapGps(this);
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -113,6 +111,15 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
             notification = (Notification) getIntent().getExtras().get("helpRecipient");
         }
 
+        if(receiveHelp){
+            myReference = FirebaseDatabase.getInstance().getReference("/Locations/"+profile.getPhoneNO()+"/"+profile.getPhoneNO());
+            otherPeopleReference = FirebaseDatabase.getInstance().getReference("/Help/"+profile.getPhoneNO()+"/");
+        }
+        else{
+            myReference = FirebaseDatabase.getInstance().getReference("/Help/"+notification.getContactNumber()+"/"+profile.getPhoneNO());
+            otherPeopleReference = FirebaseDatabase.getInstance().getReference("/Locations/"+notification.getContactNumber()+"/");
+        }
+
         bindWidgets();
         bindListeners();
     }
@@ -131,8 +138,38 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                updateSOSCount();
-                finish();
+                onBackPressed();
+            }
+        });
+
+        otherPeopleReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int count = 0;
+                for(DataSnapshot ds: dataSnapshot.getChildren()){
+                    final CustomLocation customLocation = ds.getValue(CustomLocation.class);
+                    count++;
+                    Log.e("sos receive",customLocation.toString());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if(customLocation.getLatitude()!=null &&customLocation.getLongitude()!=null) {
+                                LatLng latLng = new LatLng(Double.parseDouble(customLocation.getLatitude()), Double.parseDouble(customLocation.getLongitude()));
+                                mMap.addMarker(new MarkerOptions().position(latLng).title("they"));
+                            }
+                        }
+                    });
+                }
+                if(!receiveHelp&&count==0){
+                    Log.e("---sender---",Integer.toString(count)+" "+Boolean.toString(receiveHelp));
+                    //myReference.setValue(null);
+                    finish();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
             }
         });
     }
@@ -202,6 +239,22 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+
+        //noinspection deprecation
+        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+
+            @Override
+            public void onMyLocationChange(Location arg0) {
+                // TODO Auto-generated method stub
+                myReference
+                        .child("latitude").setValue(Double.toString(arg0.getLatitude()));
+                myReference
+                        .child("longitude").setValue(Double.toString(arg0.getLongitude()));
+                //mMap.addMarker(new MarkerOptions().position(new LatLng(arg0.getLatitude(), arg0.getLongitude())).title("It's Me!"));
+            }
+        });
+
+
     }
 
     /**
@@ -303,48 +356,13 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
         }
     }
 
-    private class GpsThread extends Thread{
-        private DatabaseReference myReference,otherPeopleReference;
-
-        GpsThread(){
-            if(receiveHelp){
-                myReference = FirebaseDatabase.getInstance().getReference("/Locations/"+profile.getPhoneNO());
-                otherPeopleReference = FirebaseDatabase.getInstance().getReference("/Help/"+profile.getPhoneNO()+"/");
-            }
-            else{
-                myReference = FirebaseDatabase.getInstance().getReference("/Help"+notification.getContactNumber()+"/"+profile.getPhoneNO());
-                otherPeopleReference = FirebaseDatabase.getInstance().getReference("/Locations/"+notification.getContactNumber());
-            }
+    @Override
+    public void onBackPressed() {
+        if(receiveHelp) {
+            otherPeopleReference.setValue(null);
+            updateSOSCount();
         }
-
-        @Override
-        public void run() {
-            myReference
-                    .child("latitude").child(Double.toString(mapGps.getLocation().getLatitude()));
-            myReference
-                    .child("longitude").child(Double.toString(mapGps.getLocation().getLongitude()));
-
-            otherPeopleReference.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                    for(DataSnapshot ds: dataSnapshot.getChildren()){
-                        final CustomLocation customLocation = ds.getValue(CustomLocation.class);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                assert customLocation != null;
-                                LatLng latLng = new LatLng(customLocation.getLatitude(),customLocation.getLongitude());
-                                mMap.addMarker(new MarkerOptions().position(latLng).title("they"));
-                            }
-                        });
-                    }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                }
-            });
-        }
+        myReference.setValue(null);
+        finish();
     }
 }

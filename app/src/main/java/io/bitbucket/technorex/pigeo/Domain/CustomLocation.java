@@ -5,29 +5,29 @@ import android.support.annotation.NonNull;
 import java.util.Objects;
 
 public class CustomLocation {
-    private double latitude,longitude;
+    private String latitude,longitude;
     public CustomLocation(){
 
     }
 
-    public CustomLocation(double latiude, double longitude) {
+    public CustomLocation(String latiude, String longitude) {
         this.latitude = latiude;
         this.longitude = longitude;
     }
 
-    public double getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
@@ -36,8 +36,8 @@ public class CustomLocation {
         if (this == o) return true;
         if (!(o instanceof CustomLocation)) return false;
         CustomLocation that = (CustomLocation) o;
-        return Double.compare(that.getLatitude(), getLatitude()) == 0 &&
-                Double.compare(that.getLongitude(), getLongitude()) == 0;
+        return Objects.equals(getLatitude(), that.getLatitude()) &&
+                Objects.equals(getLongitude(), that.getLongitude());
     }
 
     @Override
