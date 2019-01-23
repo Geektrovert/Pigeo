@@ -21,15 +21,15 @@ public class StartActivity extends Activity {
         setContentView(R.layout.activity_start);
         FirebaseUser firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        if(getGpsStatus(locationManager)){
-            if(firebaseUser != null){
+//        if(getGpsStatus(locationManager)){
+            if(firebaseUser != null) {
                 startActivity(new Intent(StartActivity.this,MapsActivity.class));
             } else{
                 startActivity(new Intent(StartActivity.this,LoginActivity.class));
             }
-        } else{
-            startActivity(new Intent(StartActivity.this,EnableGpsActivity.class));
-        }
+//        } else{
+//            startActivity(new Intent(StartActivity.this,EnableGpsActivity.class));
+//        }
     }
 
     private boolean getGpsStatus(LocationManager locationManager) {
