@@ -120,7 +120,9 @@ public class NotificationActivity extends Activity {
             notificationsListItemViewHolder.acceptButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    startActivity(new Intent(NotificationActivity.this, SOSActivity.class).putExtra("receiveHelp", false));
+                    startActivity(new Intent(NotificationActivity.this, SOSActivity.class)
+                            .putExtra("receiveHelp", false)
+                            .putExtra("helpRecipient",notification));
                 }
             });
         }

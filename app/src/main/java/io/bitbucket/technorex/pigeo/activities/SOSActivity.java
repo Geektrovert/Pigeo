@@ -24,12 +24,12 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import io.bitbucket.technorex.pigeo.Domain.Contact;
-import io.bitbucket.technorex.pigeo.Domain.Profile;
+import com.google.firebase.database.*;
+import com.google.rpc.Help;
+import io.bitbucket.technorex.pigeo.Domain.*;
 import io.bitbucket.technorex.pigeo.R;
 import io.bitbucket.technorex.pigeo.Repository.DatabaseProfileRepository;
 import io.bitbucket.technorex.pigeo.Service.ContactDatabaseService;
@@ -69,11 +69,20 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
 
     private boolean receiveHelp;
 
+    private Notification notification;
 
+    private Profile profile;
+
+    private MapGps mapGps;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sos);
+
+        profile = new DatabaseProfileRepository(this)
+                .retrieveProfile();
+
+        mapGps = new MapGps(this);
 
         // Retrieve location and camera position from saved instance state.
         if (savedInstanceState != null) {
@@ -99,6 +108,10 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
         setTitle("SOS Tracker");
         receiveHelp = (boolean) Objects.requireNonNull(getIntent().getExtras()).get("receiveHelp");
         Log.e("SOS receiveHelp:", Boolean.toString(receiveHelp));
+
+        if(!receiveHelp){
+            notification = (Notification) getIntent().getExtras().get("helpRecipient");
+        }
 
         bindWidgets();
         bindListeners();
@@ -287,6 +300,51 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
             }
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
+        }
+    }
+
+    private class GpsThread extends Thread{
+        private DatabaseReference myReference,otherPeopleReference;
+
+        GpsThread(){
+            if(receiveHelp){
+                myReference = FirebaseDatabase.getInstance().getReference("/Locations/"+profile.getPhoneNO());
+                otherPeopleReference = FirebaseDatabase.getInstance().getReference("/Help/"+profile.getPhoneNO()+"/");
+            }
+            else{
+                myReference = FirebaseDatabase.getInstance().getReference("/Help"+notification.getContactNumber()+"/"+profile.getPhoneNO());
+                otherPeopleReference = FirebaseDatabase.getInstance().getReference("/Locations/"+notification.getContactNumber());
+            }
+        }
+
+        @Override
+        public void run() {
+            myReference
+                    .child("latitude").child(Double.toString(mapGps.getLocation().getLatitude()));
+            myReference
+                    .child("longitude").child(Double.toString(mapGps.getLocation().getLongitude()));
+
+            otherPeopleReference.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    for(DataSnapshot ds: dataSnapshot.getChildren()){
+                        final CustomLocation customLocation = ds.getValue(CustomLocation.class);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                assert customLocation != null;
+                                LatLng latLng = new LatLng(customLocation.getLatitude(),customLocation.getLongitude());
+                                mMap.addMarker(new MarkerOptions().position(latLng).title("they"));
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
         }
     }
 }

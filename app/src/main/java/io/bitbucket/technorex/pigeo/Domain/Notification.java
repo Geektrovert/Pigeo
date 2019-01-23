@@ -2,9 +2,10 @@ package io.bitbucket.technorex.pigeo.Domain;
 
 import android.support.annotation.NonNull;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Notification {
+public class Notification implements Serializable {
 
     private String name;
     private String contactNumber;
