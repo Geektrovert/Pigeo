@@ -35,6 +35,7 @@ import io.bitbucket.technorex.pigeo.Repository.DatabaseProfileRepository;
 import io.bitbucket.technorex.pigeo.Service.ContactDatabaseService;
 
 import java.util.List;
+import java.util.Objects;
 
 public class SOSActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -66,6 +67,8 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
 
     private Button cancelButton;
 
+    private boolean receiveHelp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +97,8 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
         mapFragment.getMapAsync(this);
 
         setTitle("SOS Tracker");
+        receiveHelp = (boolean) Objects.requireNonNull(getIntent().getExtras()).get("receiveHelp");
+        Log.e("SOS receiveHelp:", Boolean.toString(receiveHelp));
 
         bindWidgets();
         bindListeners();
