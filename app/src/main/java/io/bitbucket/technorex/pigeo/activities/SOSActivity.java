@@ -146,7 +146,7 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int count = 0;
-                mMap.clear();
+                //mMap.clear();
                 for(DataSnapshot ds: dataSnapshot.getChildren()){
                     final CustomLocation customLocation = ds.getValue(CustomLocation.class);
                     count++;
