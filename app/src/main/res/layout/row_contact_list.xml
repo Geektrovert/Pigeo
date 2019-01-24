@@ -1,26 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			  android:layout_width="match_parent"
-			  android:layout_height="wrap_content"
-			  android:padding="16dp">
-	<LinearLayout
-			android:layout_width="wrap_content"
+			  android:layout_height="wrap_content" xmlns:app="http://schemas.android.com/apk/res-auto"
+			  android:paddingStart="16dp"
+			  android:paddingEnd="16dp"
+			  android:layout_margin="5dp">
+	<android.support.constraint.ConstraintLayout
+			android:id="@+id/contact_constraint"
+			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical">
-		<TextView
-				android:id="@+id/contact_name"
-				android:layout_width="match_parent"
+			android:orientation="horizontal"
+			android:background="@drawable/border_background">
+		<LinearLayout
+				android:id="@+id/contact_linear"
+				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
-				android:textSize="18sp"
-				android:textColor="#fafafa"
-				android:text="@string/app_name"/>
-		<TextView
-				android:id="@+id/contact_number"
-				android:textColor="#fafafa"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/error"/>
+				android:orientation="vertical"
+				app:layout_constraintBaseline_toBaselineOf="@+id/contact_constraint"
+				app:layout_constraintStart_toStartOf="parent"
+				android:layout_margin="8dp">
+			<TextView
+					android:id="@+id/contact_name"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:textSize="18sp"
+					android:textColor="#fafafa"
+					android:text="@string/app_name"/>
+			<TextView
+					android:id="@+id/contact_number"
+					android:textColor="#fafafa"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:text="@string/error"/>
 
-	</LinearLayout>
+		</LinearLayout>
+		<Button
+				android:id="@+id/delete_single_contact"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/delete"
+				android:background="@drawable/round_button_red"
+				android:padding="5dp"
+				app:layout_constraintRight_toRightOf="@id/contact_constraint"
+				app:layout_constraintBaseline_toBaselineOf="@+id/contact_linear"
+				android:drawableStart="@android:drawable/ic_menu_delete"/>
+	</android.support.constraint.ConstraintLayout>
 
 </LinearLayout>

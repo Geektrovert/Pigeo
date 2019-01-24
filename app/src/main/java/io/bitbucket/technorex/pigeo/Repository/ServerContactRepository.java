@@ -70,6 +70,8 @@ public class ServerContactRepository implements ContactRepository{
     @Override
     public void deleteContact(final Contact contact) {
         db.collection(DB_COLLECTION_NAME)
+                .document(Objects.requireNonNull(firebaseUser.getEmail()))
+                .collection("Contacts")
                 .document("Contact"+contact.getId())
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

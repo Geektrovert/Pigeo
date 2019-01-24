@@ -108,7 +108,13 @@ public class DatabaseContactRepository implements ContactRepository{
     @Override
     public void deleteContact(Contact contact) {
         try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()){
-            db.delete("CONTACTS","_id=?",new String[]{contact.getId()});
+            String deleteContact = "DELETE FROM CONTACTS " +
+                                    "WHERE CONTACT_NAME='" +
+                                    contact.getContactName() +
+                                    "' AND CONTACT_NUMBER='" +
+                                    contact.getContactNumber() +
+                                    "'";
+            db.execSQL(deleteContact);
         }
     }
 
