@@ -129,7 +129,7 @@ public class AddContactActivity extends Activity {
         List<Contact> contacts = new ArrayList<>();
 
         ContentResolver contentResolver = getContentResolver();
-        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,null,null,null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+        Cursor cursor = contentResolver.query(ContactsContract.Contacts.CONTENT_URI,null,null,null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
         assert cursor != null;
 
         while (cursor.moveToNext()){

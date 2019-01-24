@@ -156,7 +156,7 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
                         public void run() {
                             if(customLocation.getLatitude()!=null &&customLocation.getLongitude()!=null) {
                                 LatLng latLng = new LatLng(Double.parseDouble(customLocation.getLatitude()), Double.parseDouble(customLocation.getLongitude()));
-                                mMap.addMarker(new MarkerOptions().position(latLng).title("they"));
+                                mMap.addMarker(new MarkerOptions().position(latLng));
                             }
                         }
                     });
@@ -246,7 +246,6 @@ public class SOSActivity extends FragmentActivity implements OnMapReadyCallback 
 
             @Override
             public void onMyLocationChange(Location arg0) {
-                // TODO Auto-generated method stub
                 myReference
                         .child("latitude").setValue(Double.toString(arg0.getLatitude()));
                 myReference
