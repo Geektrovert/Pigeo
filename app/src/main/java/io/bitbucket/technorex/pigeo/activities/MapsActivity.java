@@ -150,6 +150,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         notificationButton = findViewById(R.id.notifications);
         databaseProfileRepository = new DatabaseProfileRepository(this);
         profile = databaseProfileRepository.retrieveProfile();
+
+        DatabaseContactRepository databaseContactRepository = new DatabaseContactRepository(this);
+        contacts.setText(databaseContactRepository.getContactCount());
     }
 
     private void sendSOS() {

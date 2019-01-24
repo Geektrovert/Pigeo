@@ -19,11 +19,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import io.bitbucket.technorex.pigeo.Domain.Contact;
 import io.bitbucket.technorex.pigeo.Domain.Profile;
 import io.bitbucket.technorex.pigeo.R;
+import io.bitbucket.technorex.pigeo.Repository.ContactRepository;
 import io.bitbucket.technorex.pigeo.Repository.ProfileRepository;
+import io.bitbucket.technorex.pigeo.Service.ContactDatabaseService;
+import io.bitbucket.technorex.pigeo.Service.ContactServerService;
 import io.bitbucket.technorex.pigeo.Service.ProfileDatabaseService;
 import io.bitbucket.technorex.pigeo.Service.ProfileServerService;
+
+import java.util.List;
 
 /**Project Pigeo
  * @author Sihan Tawsik, Samnan Rahee
@@ -131,6 +137,7 @@ public class LoginActivity extends Activity {
                                     DatabaseReference onlineUserDatabaseReference
                                             = FirebaseDatabase.getInstance().getReference("/Online/");
                                     onlineUserDatabaseReference.child(data.getPhoneNO()).setValue("true");
+                                    retrieveContacts();
                                     progressDialog.dismiss();
                                     startActivity(new Intent(LoginActivity.this,MapsActivity.class));
                                 }
@@ -175,6 +182,19 @@ public class LoginActivity extends Activity {
         signUp=findViewById(R.id.signUp);
         progressDialog=new ProgressDialog(this);
         firebaseAuth=FirebaseAuth.getInstance();
+    }
+
+    private void retrieveContacts() {
+        final ContactDatabaseService contactDatabaseService = new ContactDatabaseService(this);
+        ContactServerService contactServerService = new ContactServerService();
+
+        contactServerService.listCardsAsync(new ContactRepository.OnResultListener<List<Contact>>() {
+            @Override
+            public void onResult(List<Contact> data) {
+                contactDatabaseService.resetContacts();
+                contactDatabaseService.addToContacts(data);
+            }
+        });
     }
 
 }

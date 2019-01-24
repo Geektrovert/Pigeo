@@ -7,7 +7,13 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import io.bitbucket.technorex.pigeo.Domain.Contact;
 import io.bitbucket.technorex.pigeo.R;
+import io.bitbucket.technorex.pigeo.Repository.ContactRepository;
+import io.bitbucket.technorex.pigeo.Service.ContactDatabaseService;
+import io.bitbucket.technorex.pigeo.Service.ContactServerService;
+
+import java.util.List;
 
 public class StartActivity extends Activity {
     private boolean gps_enabled = false;
@@ -23,6 +29,7 @@ public class StartActivity extends Activity {
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 //        if(getGpsStatus(locationManager)){
             if(firebaseUser != null) {
+                retrieveContacts();
                 startActivity(new Intent(StartActivity.this,MapsActivity.class));
             } else{
                 startActivity(new Intent(StartActivity.this,LoginActivity.class));
@@ -32,19 +39,16 @@ public class StartActivity extends Activity {
 //        }
     }
 
-    private boolean getGpsStatus(LocationManager locationManager) {
-        try {
-            gps_enabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
+    private void retrieveContacts() {
+        final ContactDatabaseService contactDatabaseService = new ContactDatabaseService(this);
+        ContactServerService contactServerService = new ContactServerService();
 
-        try {
-            network_enabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        } catch(Exception ex) {
-            ex.printStackTrace();
-        }
-
-        return gps_enabled || network_enabled;
+        contactServerService.listCardsAsync(new ContactRepository.OnResultListener<List<Contact>>() {
+            @Override
+            public void onResult(List<Contact> data) {
+                contactDatabaseService.resetContacts();
+                contactDatabaseService.addToContacts(data);
+            }
+        });
     }
 }

@@ -64,6 +64,15 @@ public class DatabaseContactRepository implements ContactRepository{
         }
     }
 
+    public void addToContacts(List<Contact> contacts) {
+        try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()) {
+            for(Contact contact : contacts){
+                ContentValues contentValues = getContentValues(contact);
+                db.insertOrThrow("CONTACTS",null,contentValues);
+            }
+        }
+    }
+
     public void addToAllContacts(List<Contact> contacts){
         try(SQLiteDatabase db = new DbHelper(context).getWritableDatabase()) {
             for(Contact contact : contacts){
