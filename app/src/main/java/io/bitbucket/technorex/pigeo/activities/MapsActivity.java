@@ -79,6 +79,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     @SuppressWarnings("FieldCanBeLocal")
     private DatabaseProfileRepository databaseProfileRepository;
 
+    private DatabaseReference myReference;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,6 +121,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         DatabaseReference onlineUserDatabaseReference
                 = FirebaseDatabase.getInstance().getReference("/Online/");
         onlineUserDatabaseReference.child(profile.getPhoneNO()).setValue("true");
+
+        myReference = FirebaseDatabase.getInstance().getReference("/Locations/"+profile.getPhoneNO()+"/"+profile.getPhoneNO());
     }
 
     private void bindWidgets() {
@@ -403,6 +407,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+
+        //noinspection deprecation
+        mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
+
+            @Override
+            public void onMyLocationChange(Location arg0) {
+                // TODO Auto-generated method stub
+                myReference
+                        .child("latitude").setValue(Double.toString(arg0.getLatitude()));
+                myReference
+                        .child("longitude").setValue(Double.toString(arg0.getLongitude()));
+                //mMap.addMarker(new MarkerOptions().position(new LatLng(arg0.getLatitude(), arg0.getLongitude())).title("It's Me!"));
+            }
+        });
     }
 
 
