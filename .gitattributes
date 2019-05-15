@@ -39,3 +39,5 @@
 *.png           binary
 *.so            binary
 *.war           binary
+
+JavaDoc/* linguist-vendored
